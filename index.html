@@ -71,6 +71,7 @@ body {
   color: var(--text);
   text-decoration: none;
   letter-spacing: 0.02em;
+  cursor: pointer;
 }
 
 .nav-logo span { color: var(--accent); }
@@ -89,6 +90,7 @@ body {
   letter-spacing: 0.01em;
   transition: color 0.2s;
   position: relative;
+  cursor: pointer;
 }
 
 .nav-links a:hover, .nav-links a.active {
@@ -354,6 +356,7 @@ body {
   color: var(--text-dim);
   text-decoration: none;
   transition: color 0.2s;
+  cursor: pointer;
 }
 
 .breadcrumb a:hover { color: var(--accent); }
@@ -457,6 +460,7 @@ body {
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s;
+  cursor: pointer;
 }
 
 .footer-links a:hover { color: var(--accent); }
@@ -653,6 +657,7 @@ body {
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s;
+  cursor: pointer;
 }
 
 .internal-link:hover {
@@ -693,14 +698,14 @@ body {
 
 <!-- Navigation -->
 <nav class="nav">
-  <a href="#/" class="nav-logo">Auto<span>Craft</span></a>
+  <a data-route="/" class="nav-logo">Auto<span>Craft</span></a>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#/" data-page="home">Home</a></li>
-    <li><a href="#/car-painting-process/" data-page="process">Process</a></li>
-    <li><a href="#/full-car-painting/" data-page="full">Full Painting</a></li>
-    <li><a href="#/car-paint-repair/" data-page="repair">Paint Repair</a></li>
-    <li><a href="#/car-painting-colour-matching/" data-page="colour">Colour Matching</a></li>
-    <li><a href="#/car-painting-faq/" data-page="faq">FAQ</a></li>
+    <li><a data-route="/" data-page="home">Home</a></li>
+    <li><a data-route="/car-painting-process/" data-page="process">Process</a></li>
+    <li><a data-route="/full-car-painting/" data-page="full">Full Painting</a></li>
+    <li><a data-route="/car-paint-repair/" data-page="repair">Paint Repair</a></li>
+    <li><a data-route="/car-painting-colour-matching/" data-page="colour">Colour Matching</a></li>
+    <li><a data-route="/car-painting-faq/" data-page="faq">FAQ</a></li>
   </ul>
   <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">☰</button>
 </nav>
@@ -712,7 +717,7 @@ body {
       <div class="hero-label">Automotive Painting Services</div>
       <h1>Precision paintwork for vehicles that matter</h1>
       <p>From minor scratch repair to complete vehicle resprays, we deliver factory-quality finishes using professional-grade materials and proven techniques.</p>
-      <a href="#/car-painting-process/" class="hero-cta">Explore Our Process →</a>
+      <a data-route="/car-painting-process/" class="hero-cta">Explore Our Process →</a>
     </div>
     <div class="scroll-indicator">
       <span>Scroll</span>
@@ -726,32 +731,32 @@ body {
     <p class="section-text fade-in">We operate a dedicated paint facility equipped for everything from single-panel touch-ups to full vehicle refinishing. Every job follows the same preparation standards, regardless of scope.</p>
 
     <div class="service-grid">
-      <a href="#/car-painting-process/" class="service-card fade-in">
+      <a data-route="/car-painting-process/" class="service-card fade-in">
         <h3>Car Painting</h3>
         <p>Complete exterior refinishing using modern waterborne and solvent-based paint systems. Suitable for restoration, colour changes, and wear repair.</p>
         <span class="arrow">Learn more →</span>
       </a>
-      <a href="#/full-car-painting/" class="service-card fade-in">
+      <a data-route="/full-car-painting/" class="service-card fade-in">
         <h3>Full-Body Painting</h3>
         <p>Comprehensive respray covering all exterior panels. Includes full strip-down, surface preparation, and multi-stage paint application.</p>
         <span class="arrow">Learn more →</span>
       </a>
-      <a href="#/car-painting-process/" class="service-card fade-in">
+      <a data-route="/car-painting-process/" class="service-card fade-in">
         <h3>Panel Painting</h3>
         <p>Targeted repair and repainting of individual body panels. Colour-matched to your existing finish with seamless blending.</p>
         <span class="arrow">Learn more →</span>
       </a>
-      <a href="#/car-paint-repair/" class="service-card fade-in">
+      <a data-route="/car-paint-repair/" class="service-card fade-in">
         <h3>Paint Repair</h3>
         <p>Scratches, stone chips, and clear coat failure addressed with minimal intervention. Preserves surrounding factory finish where possible.</p>
         <span class="arrow">Learn more →</span>
       </a>
-      <a href="#/car-painting-colour-matching/" class="service-card fade-in">
+      <a data-route="/car-painting-colour-matching/" class="service-card fade-in">
         <h3>Colour Matching</h3>
         <p>Spectrophotometer-assisted colour matching against manufacturer codes and physical samples. Tested under multiple light sources.</p>
         <span class="arrow">Learn more →</span>
       </a>
-      <a href="#/car-painting-faq/" class="service-card fade-in">
+      <a data-route="/car-painting-faq/" class="service-card fade-in">
         <h3>Common Questions</h3>
         <p>Answers about pricing, timelines, preparation requirements, and what to expect from a professional paint job.</p>
         <span class="arrow">Read FAQ →</span>
@@ -824,7 +829,7 @@ body {
 <!-- Page 2: Process -->
 <div class="page" id="page-process">
   <div class="breadcrumb">
-    <a href="#/">Home</a> <span>/</span> Car Painting Process
+    <a data-route="/">Home</a> <span>/</span> Car Painting Process
   </div>
   <div class="page-header">
     <div class="section-label">The Process</div>
@@ -949,7 +954,7 @@ body {
 <!-- Page 3: Full Car Painting -->
 <div class="page" id="page-full">
   <div class="breadcrumb">
-    <a href="#/">Home</a> <span>/</span> <a href="#/car-painting-process/">Process</a> <span>/</span> Full Car Painting
+    <a data-route="/">Home</a> <span>/</span> <a data-route="/car-painting-process/">Process</a> <span>/</span> Full Car Painting
   </div>
   <div class="page-header">
     <div class="section-label">Full Respray</div>
@@ -1061,7 +1066,7 @@ body {
         </div>
       </div>
 
-      <p class="section-text fade-in" style="margin-top: 48px;">For vehicle owners in the local area, we offer drop-off and collection from our workshop. If you'd like to discuss a full respray for your vehicle, <a href="#/car-painting-faq/" class="internal-link">see our FAQ</a> or get in touch for an assessment.</p>
+      <p class="section-text fade-in" style="margin-top: 48px;">For vehicle owners in the local area, we offer drop-off and collection from our workshop. If you'd like to discuss a full respray for your vehicle, <a data-route="/car-painting-faq/" class="internal-link">see our FAQ</a> or get in touch for an assessment.</p>
     </div>
   </section>
 </div>
@@ -1069,7 +1074,7 @@ body {
 <!-- Page 4: Paint Repair -->
 <div class="page" id="page-repair">
   <div class="breadcrumb">
-    <a href="#/">Home</a> <span>/</span> Car Paint Repair
+    <a data-route="/">Home</a> <span>/</span> Car Paint Repair
   </div>
   <div class="page-header">
     <div class="section-label">Paint Repair</div>
@@ -1210,7 +1215,7 @@ body {
 <!-- Page 5: Colour Matching -->
 <div class="page" id="page-colour">
   <div class="breadcrumb">
-    <a href="#/">Home</a> <span>/</span> Colour Matching
+    <a data-route="/">Home</a> <span>/</span> Colour Matching
   </div>
   <div class="page-header">
     <div class="section-label">Colour Matching</div>
@@ -1229,7 +1234,6 @@ body {
         <div class="highlight-box fade-in">
           <p>"Colour matching isn't just about the formula — it's about accounting for how the original paint has changed over time."</p>
         </div>
-        <img src="https://image.qwenlm.ai/public_source/e70cad61-3039-4c1c-9f10-efd23f31b8f3/1e915c857-df1b-4520-bff7-672208ef859f.png" alt="Colour matching equipment and paint samples" style="width: 100%; border-radius: 8px; margin-top: 24px; border: 1px solid var(--border);">
       </div>
     </div>
 
@@ -1323,7 +1327,7 @@ body {
 <!-- Page 6: FAQ -->
 <div class="page" id="page-faq">
   <div class="breadcrumb">
-    <a href="#/">Home</a> <span>/</span> FAQ
+    <a data-route="/">Home</a> <span>/</span> FAQ
   </div>
   <div class="page-header">
     <div class="section-label">FAQ</div>
@@ -1442,7 +1446,7 @@ body {
     <div class="section-label fade-in">Still Have Questions?</div>
     <h2 class="section-title fade-in">Get in touch</h2>
     <p class="section-text fade-in">If your question isn't answered here, we're happy to help. Bring your vehicle in for a free assessment, or contact us to discuss your requirements.</p>
-    <a href="#/" class="hero-cta">Back to Home →</a>
+    <a data-route="/" class="hero-cta">Back to Home →</a>
   </section>
 </div>
 
@@ -1456,18 +1460,18 @@ body {
     <div>
       <h4>Services</h4>
       <ul class="footer-links">
-        <li><a href="#/car-painting-process/">Car Painting</a></li>
-        <li><a href="#/full-car-painting/">Full-Body Painting</a></li>
-        <li><a href="#/car-paint-repair/">Paint Repair</a></li>
-        <li><a href="#/car-painting-colour-matching/">Colour Matching</a></li>
+        <li><a data-route="/car-painting-process/">Car Painting</a></li>
+        <li><a data-route="/full-car-painting/">Full-Body Painting</a></li>
+        <li><a data-route="/car-paint-repair/">Paint Repair</a></li>
+        <li><a data-route="/car-painting-colour-matching/">Colour Matching</a></li>
       </ul>
     </div>
     <div>
       <h4>Information</h4>
       <ul class="footer-links">
-        <li><a href="#/car-painting-process/">Our Process</a></li>
-        <li><a href="#/car-painting-faq/">FAQ</a></li>
-        <li><a href="#/">Service Area</a></li>
+        <li><a data-route="/car-painting-process/">Our Process</a></li>
+        <li><a data-route="/car-painting-faq/">FAQ</a></li>
+        <li><a data-route="/">Service Area</a></li>
       </ul>
     </div>
     <div>
@@ -1566,11 +1570,9 @@ function createEnvironmentMap() {
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
   pmremGenerator.compileEquirectangularShader();
 
-  // Create a simple environment scene
   const envScene = new THREE.Scene();
   envScene.background = new THREE.Color(0x1a1a1a);
 
-  // Add some lights to the environment
   const envLight1 = new THREE.PointLight(0xffffff, 2, 20);
   envLight1.position.set(5, 5, 5);
   envScene.add(envLight1);
@@ -1583,7 +1585,6 @@ function createEnvironmentMap() {
   envLight3.position.set(0, 8, 0);
   envScene.add(envLight3);
 
-  // Add some geometry for reflections
   const envBox = new THREE.Mesh(
     new THREE.BoxGeometry(20, 10, 20),
     new THREE.MeshBasicMaterial({ color: 0x222222, side: THREE.BackSide })
@@ -1603,7 +1604,6 @@ function createEnvironmentMap() {
 function createWorkshop() {
   workshop = new THREE.Group();
 
-  // Floor
   const floorGeometry = new THREE.PlaneGeometry(30, 30);
   const floorMaterial = new THREE.MeshStandardMaterial({
     color: 0x2a2a2a,
@@ -1616,12 +1616,10 @@ function createWorkshop() {
   floor.receiveShadow = true;
   workshop.add(floor);
 
-  // Floor grid lines
   const gridHelper = new THREE.GridHelper(30, 30, 0x333333, 0x222222);
   gridHelper.position.y = 0.01;
   workshop.add(gridHelper);
 
-  // Back wall
   const wallGeometry = new THREE.PlaneGeometry(30, 10);
   const wallMaterial = new THREE.MeshStandardMaterial({
     color: 0x1a1a1a,
@@ -1632,7 +1630,6 @@ function createWorkshop() {
   backWall.position.set(0, 5, -10);
   workshop.add(backWall);
 
-  // Side walls
   const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
   leftWall.position.set(-10, 5, 0);
   leftWall.rotation.y = Math.PI / 2;
@@ -1643,7 +1640,6 @@ function createWorkshop() {
   rightWall.rotation.y = -Math.PI / 2;
   workshop.add(rightWall);
 
-  // Ceiling lights (visual only)
   for (let i = -2; i <= 2; i++) {
     const lightFixture = new THREE.Mesh(
       new THREE.BoxGeometry(0.3, 0.1, 4),
@@ -1657,7 +1653,6 @@ function createWorkshop() {
     workshop.add(lightGlow);
   }
 
-  // Tool cabinet (simple box)
   const cabinetGeometry = new THREE.BoxGeometry(2, 1.5, 0.8);
   const cabinetMaterial = new THREE.MeshStandardMaterial({
     color: 0x3a3a3a,
@@ -1669,7 +1664,6 @@ function createWorkshop() {
   cabinet.castShadow = true;
   workshop.add(cabinet);
 
-  // Another cabinet
   const cabinet2 = cabinet.clone();
   cabinet2.position.set(6, 0.75, -6);
   workshop.add(cabinet2);
@@ -1680,7 +1674,6 @@ function createWorkshop() {
 function createCar() {
   car = new THREE.Group();
 
-  // Car body - main shape
   const bodyShape = new THREE.Shape();
   bodyShape.moveTo(-2.2, 0.3);
   bodyShape.lineTo(-2.0, 0.3);
@@ -1711,7 +1704,6 @@ function createCar() {
   const bodyGeometry = new THREE.ExtrudeGeometry(bodyShape, extrudeSettings);
   bodyGeometry.center();
 
-  // Metallic paint material
   const paintMaterial = new THREE.MeshPhysicalMaterial({
     color: 0x1a3a5c,
     metalness: 0.7,
@@ -1727,7 +1719,6 @@ function createCar() {
   body.receiveShadow = true;
   car.add(body);
 
-  // Windows
   const windowMaterial = new THREE.MeshPhysicalMaterial({
     color: 0x111111,
     metalness: 0.9,
@@ -1743,7 +1734,6 @@ function createCar() {
   windshield.rotation.z = 0.3;
   car.add(windshield);
 
-  // Wheels
   const wheelGeometry = new THREE.CylinderGeometry(0.35, 0.35, 0.25, 16);
   const wheelMaterial = new THREE.MeshStandardMaterial({
     color: 0x111111,
@@ -1765,7 +1755,6 @@ function createCar() {
     wheel.castShadow = true;
     car.add(wheel);
 
-    // Rim
     const rimGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.26, 8);
     const rimMaterial = new THREE.MeshStandardMaterial({
       color: 0x888888,
@@ -1778,7 +1767,6 @@ function createCar() {
     car.add(rim);
   });
 
-  // Headlights
   const headlightGeometry = new THREE.SphereGeometry(0.15, 8, 8);
   const headlightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffee });
 
@@ -1790,7 +1778,6 @@ function createCar() {
   headlight2.position.set(-2.1, 0.5, -0.5);
   car.add(headlight2);
 
-  // Taillights
   const taillightMaterial = new THREE.MeshBasicMaterial({ color: 0xff2222 });
 
   const taillight1 = new THREE.Mesh(headlightGeometry, taillightMaterial);
@@ -1814,20 +1801,15 @@ function onResize() {
 function onScroll() {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  scrollProgress = scrollTop / docHeight;
+  scrollProgress = docHeight > 0 ? scrollTop / docHeight : 0;
 }
 
 function animate() {
   animationFrame = requestAnimationFrame(animate);
 
   const time = clock.getElapsedTime();
-  const delta = clock.getDelta();
 
   if (car) {
-    // Subtle idle animation
-    car.rotation.y = Math.sin(time * 0.3) * 0.1;
-
-    // Scroll-based rotation
     if (currentPage === 'home') {
       car.rotation.y = scrollProgress * Math.PI * 2;
       car.position.y = Math.sin(scrollProgress * Math.PI) * 0.2;
@@ -1845,7 +1827,6 @@ function animate() {
     }
   }
 
-  // Camera subtle movement
   if (currentPage !== 'repair') {
     camera.position.x = 6 + Math.sin(time * 0.2) * 0.3;
     camera.position.y = 3 + Math.sin(time * 0.15) * 0.2;
@@ -1856,33 +1837,64 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-// Page routing
-function navigateToPage(pageId) {
+// ============================================
+// Clean URL Routing (History API)
+// ============================================
+
+// Route to page ID map
+const routeToPage = {
+  '/': 'home',
+  '/car-painting-process/': 'process',
+  '/car-painting-process': 'process',
+  '/full-car-painting/': 'full',
+  '/full-car-painting': 'full',
+  '/car-paint-repair/': 'repair',
+  '/car-paint-repair': 'repair',
+  '/car-painting-colour-matching/': 'colour',
+  '/car-painting-colour-matching': 'colour',
+  '/car-painting-faq/': 'faq',
+  '/car-painting-faq': 'faq'
+};
+
+// Canonical routes (with trailing slash)
+const canonicalRoutes = {
+  'home': '/',
+  'process': '/car-painting-process/',
+  'full': '/full-car-painting/',
+  'repair': '/car-paint-repair/',
+  'colour': '/car-painting-colour-matching/',
+  'faq': '/car-painting-faq/'
+};
+
+function getPageFromPath(path) {
+  return routeToPage[path] || 'home';
+}
+
+function navigateToPath(path, pushState = true) {
+  const pageId = getPageFromPath(path);
   const transition = document.getElementById('pageTransition');
   transition.classList.add('active');
 
+  if (pushState) {
+    const canonical = canonicalRoutes[pageId] || '/';
+    history.pushState({ page: pageId, path: canonical }, '', canonical);
+  }
+
   setTimeout(() => {
-    // Hide all pages
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
-    // Show target page
     const targetPage = document.getElementById(`page-${pageId}`);
     if (targetPage) {
       targetPage.classList.add('active');
       currentPage = pageId;
 
-      // Update nav active state
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
       const activeLink = document.querySelector(`.nav-links a[data-page="${pageId}"]`);
       if (activeLink) activeLink.classList.add('active');
 
-      // Scroll to top
       window.scrollTo(0, 0);
-
-      // Reset scroll progress
       scrollProgress = 0;
 
-      // Trigger fade-in animations
       setTimeout(() => {
         observeFadeElements();
       }, 100);
@@ -1892,28 +1904,55 @@ function navigateToPage(pageId) {
   }, 400);
 }
 
-// Hash routing
-function handleRoute() {
-  const hash = window.location.hash || '#/';
-  let pageId = 'home';
+// Intercept clicks on elements with data-route attribute
+document.addEventListener('click', (e) => {
+  const target = e.target.closest('[data-route]');
+  if (target) {
+    e.preventDefault();
+    const path = target.getAttribute('data-route');
+    navigateToPath(path, true);
 
-  if (hash === '#/car-painting-process/') pageId = 'process';
-  else if (hash === '#/full-car-painting/') pageId = 'full';
-  else if (hash === '#/car-paint-repair/') pageId = 'repair';
-  else if (hash === '#/car-painting-colour-matching/') pageId = 'colour';
-  else if (hash === '#/car-painting-faq/') pageId = 'faq';
+    // Close mobile menu if open
+    document.getElementById('navLinks').classList.remove('open');
+  }
+});
 
-  navigateToPage(pageId);
-}
+// Handle browser back/forward
+window.addEventListener('popstate', (e) => {
+  const path = window.location.pathname;
+  const pageId = getPageFromPath(path);
+  const transition = document.getElementById('pageTransition');
+  transition.classList.add('active');
 
-window.addEventListener('hashchange', handleRoute);
+  setTimeout(() => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+    const targetPage = document.getElementById(`page-${pageId}`);
+    if (targetPage) {
+      targetPage.classList.add('active');
+      currentPage = pageId;
+
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const activeLink = document.querySelector(`.nav-links a[data-page="${pageId}"]`);
+      if (activeLink) activeLink.classList.add('active');
+
+      window.scrollTo(0, 0);
+      scrollProgress = 0;
+
+      setTimeout(() => {
+        observeFadeElements();
+      }, 100);
+    }
+
+    transition.classList.remove('active');
+  }, 400);
+});
 
 // FAQ toggle
 function toggleFaq(element) {
   const item = element.parentElement;
   const isOpen = item.classList.contains('open');
 
-  // Close all in same list
   item.parentElement.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
 
   if (!isOpen) {
@@ -1943,7 +1982,28 @@ document.getElementById('menuBtn').addEventListener('click', () => {
 
 // Initialize
 init();
-handleRoute();
+
+// Set initial route based on current URL path
+const initialPath = window.location.pathname;
+const initialPage = getPageFromPath(initialPath);
+
+// Set initial active page
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+const initialTarget = document.getElementById(`page-${initialPage}`);
+if (initialTarget) {
+  initialTarget.classList.add('active');
+  currentPage = initialPage;
+}
+
+// Set initial nav active state
+document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+const initialActiveLink = document.querySelector(`.nav-links a[data-page="${initialPage}"]`);
+if (initialActiveLink) initialActiveLink.classList.add('active');
+
+// Replace state with canonical path
+const canonical = canonicalRoutes[initialPage] || '/';
+history.replaceState({ page: initialPage, path: canonical }, '', canonical);
+
 observeFadeElements();
 </script>
 
