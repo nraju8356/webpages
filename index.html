@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoCraft — Professional Automotive Painting & Refinishing</title>
-<meta name="description" content="Premium automotive painting services. Full body resprays, paint repair, and precision colour matching by master craftsmen.">
+<title>AutoCraft Painting — Professional Car Painting & Auto Body Services</title>
+<meta name="description" content="Professional automotive painting services including full body painting, panel painting, paint repair, and colour matching. Serving local vehicle owners with quality refinishing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg: #050505;
-  --surface: #0a0a0a;
-  --surface2: #111111;
-  --text: #f0ece4;
-  --text-dim: #8a8578;
-  --text-muted: #4a4740;
-  --accent: #c9a961;
-  --accent-hover: #d4b878;
-  --border: rgba(255,255,255,0.08);
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface2: #1a1a1a;
+  --text: #f5f5f5;
+  --text-dim: #a0a0a0;
+  --text-muted: #666;
+  --accent: #c8a87c;
+  --accent-hover: #d4b88a;
+  --border: #222;
   --font-sans: 'Inter', -apple-system, sans-serif;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -33,7 +33,6 @@ body {
   color: var(--text);
   overflow-x: hidden;
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
 }
 
 #canvas-container {
@@ -42,36 +41,11 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: 0;
-  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
 }
 
 #canvas-container canvas {
   width: 100% !important;
   height: 100% !important;
-  display: block;
-}
-
-/* Vignette overlay */
-.vignette {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%);
-}
-
-/* Film grain */
-.grain {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Navigation */
@@ -79,50 +53,42 @@ body {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 0 60px;
-  height: 80px;
+  padding: 0 40px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav.scrolled {
-  background: rgba(5,5,5,0.85);
-  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
+  transition: all 0.3s ease;
 }
 
 .nav-logo {
   font-family: var(--font-serif);
-  font-size: 1.5rem;
-  font-weight: 400;
+  font-size: 1.4rem;
+  font-weight: 500;
   color: var(--text);
-  letter-spacing: 0.05em;
-  cursor: pointer;
   text-decoration: none;
+  letter-spacing: 0.02em;
+  cursor: pointer;
 }
 
-.nav-logo em {
-  font-style: italic;
-  color: var(--accent);
-  font-weight: 300;
-}
+.nav-logo span { color: var(--accent); }
 
 .nav-links {
   display: flex;
-  gap: 40px;
+  gap: 32px;
   list-style: none;
 }
 
 .nav-links a {
   color: var(--text-dim);
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 400;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: color 0.3s;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
   position: relative;
   cursor: pointer;
 }
@@ -134,8 +100,7 @@ body {
 .nav-links a.active::after {
   content: '';
   position: absolute;
-  bottom: -6px; left: 0;
-  width: 20px;
+  bottom: -4px; left: 0; right: 0;
   height: 1px;
   background: var(--accent);
 }
@@ -145,16 +110,15 @@ body {
   background: none;
   border: none;
   color: var(--text);
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   cursor: pointer;
-  letter-spacing: 0.1em;
 }
 
 /* Page containers */
 .page {
   display: none;
   position: relative;
-  z-index: 3;
+  z-index: 1;
   min-height: 100vh;
 }
 
@@ -170,249 +134,146 @@ body {
 }
 
 .hero-content {
-  max-width: 620px;
+  max-width: 560px;
   position: relative;
   z-index: 2;
 }
 
 .hero-label {
-  font-size: 0.7rem;
-  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.hero-label::before {
-  content: '';
-  width: 40px;
-  height: 1px;
-  background: var(--accent);
 }
 
 .hero h1 {
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 7vw, 6rem);
-  font-weight: 300;
-  line-height: 0.95;
-  margin-bottom: 32px;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 24px;
   letter-spacing: -0.02em;
-}
-
-.hero h1 em {
-  font-style: italic;
-  color: var(--accent);
-  font-weight: 300;
 }
 
 .hero p {
   font-size: 1.05rem;
   color: var(--text-dim);
   line-height: 1.7;
-  margin-bottom: 48px;
+  margin-bottom: 36px;
   max-width: 480px;
-  font-weight: 300;
 }
 
 .hero-cta {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
-  padding: 18px 40px;
-  background: transparent;
-  color: var(--text);
-  text-decoration: none;
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-cta::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
+  gap: 10px;
+  padding: 14px 32px;
   background: var(--accent);
-  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: -1;
+  color: #0a0a0a;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.hero-cta:hover {
-  color: #000;
-  border-color: var(--accent);
-}
-
-.hero-cta:hover::before {
-  left: 0;
-}
-
-.hero-cta .arrow {
-  transition: transform 0.3s;
-}
-
-.hero-cta:hover .arrow {
-  transform: translateX(6px);
-}
+.hero-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
 /* Content sections */
 .content-section {
-  padding: 160px 80px;
-  max-width: 1400px;
+  padding: 120px 80px;
+  max-width: 1200px;
   margin: 0 auto;
-  position: relative;
 }
 
 .section-label {
   font-size: 0.7rem;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.section-label::before {
-  content: '';
-  width: 30px;
-  height: 1px;
-  background: var(--accent);
 }
 
 .section-title {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 3.8rem);
-  font-weight: 300;
-  margin-bottom: 32px;
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-}
-
-.section-title em {
-  font-style: italic;
-  color: var(--accent);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 400;
+  margin-bottom: 24px;
+  line-height: 1.15;
 }
 
 .section-text {
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--text-dim);
   line-height: 1.8;
   max-width: 640px;
   margin-bottom: 48px;
-  font-weight: 300;
 }
 
 /* Service grid */
 .service-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1px;
-  margin-top: 80px;
-  background: var(--border);
-  border: 1px solid var(--border);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
 }
 
 .service-card {
-  background: rgba(10,10,10,0.6);
-  backdrop-filter: blur(10px);
-  padding: 56px 48px;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 36px;
+  transition: all 0.3s ease;
   cursor: pointer;
   text-decoration: none;
   color: inherit;
   display: block;
-  position: relative;
-  overflow: hidden;
 }
-
-.service-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: linear-gradient(135deg, rgba(201,169,97,0.05) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.5s;
-}
-
-.service-card:hover::before { opacity: 1; }
 
 .service-card:hover {
-  background: rgba(15,15,15,0.8);
-}
-
-.service-card .number {
-  font-family: var(--font-serif);
-  font-size: 0.9rem;
-  color: var(--accent);
-  margin-bottom: 32px;
-  letter-spacing: 0.1em;
-  font-style: italic;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: var(--surface2);
 }
 
 .service-card h3 {
   font-family: var(--font-serif);
-  font-size: 1.8rem;
-  font-weight: 300;
-  margin-bottom: 16px;
-  line-height: 1.2;
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 12px;
 }
 
 .service-card p {
   font-size: 0.9rem;
   color: var(--text-dim);
-  line-height: 1.7;
-  font-weight: 300;
-  margin-bottom: 32px;
+  line-height: 1.6;
 }
 
-.service-card .link {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+.service-card .arrow {
+  display: inline-block;
+  margin-top: 16px;
   color: var(--accent);
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 500;
+  font-size: 0.85rem;
 }
-
-.service-card .link .line {
-  width: 20px;
-  height: 1px;
-  background: var(--accent);
-  transition: width 0.3s;
-}
-
-.service-card:hover .link .line { width: 40px; }
 
 /* Process steps */
 .process-steps {
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 .process-step {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 60px;
-  padding: 60px 0;
+  grid-template-columns: 80px 1fr;
+  gap: 32px;
+  padding: 40px 0;
   border-bottom: 1px solid var(--border);
   opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
 }
 
 .process-step.visible {
@@ -420,77 +281,52 @@ body {
   transform: translateY(0);
 }
 
-.process-step::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0;
-  width: 0;
-  height: 1px;
-  background: var(--accent);
-  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.process-step.visible::before {
-  width: 100%;
-}
-
 .step-number {
   font-family: var(--font-serif);
-  font-size: 3.5rem;
+  font-size: 2rem;
   color: var(--accent);
-  font-weight: 300;
-  font-style: italic;
-  line-height: 1;
+  font-weight: 400;
 }
 
 .step-content h3 {
-  font-family: var(--font-serif);
-  font-size: 1.6rem;
-  font-weight: 300;
-  margin-bottom: 16px;
-  letter-spacing: -0.01em;
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 10px;
 }
 
 .step-content p {
   font-size: 0.95rem;
   color: var(--text-dim);
-  line-height: 1.8;
-  font-weight: 300;
-  max-width: 560px;
+  line-height: 1.7;
 }
 
 /* FAQ */
 .faq-list {
-  margin-top: 60px;
+  margin-top: 48px;
 }
 
 .faq-item {
   border-bottom: 1px solid var(--border);
-  padding: 32px 0;
+  padding: 24px 0;
 }
 
 .faq-question {
-  font-family: var(--font-serif);
-  font-size: 1.4rem;
-  font-weight: 300;
+  font-size: 1.05rem;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  transition: color 0.3s;
-  line-height: 1.3;
+  transition: color 0.2s;
 }
 
 .faq-question:hover { color: var(--accent); }
 
 .faq-question .icon {
-  font-size: 1.5rem;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  color: var(--accent);
-  font-weight: 300;
-  flex-shrink: 0;
-  margin-left: 32px;
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+  color: var(--text-muted);
 }
 
 .faq-item.open .faq-question .icon { transform: rotate(45deg); }
@@ -498,176 +334,118 @@ body {
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s;
+  transition: max-height 0.4s ease, padding 0.3s ease;
   font-size: 0.95rem;
   color: var(--text-dim);
-  line-height: 1.8;
-  font-weight: 300;
-  max-width: 640px;
+  line-height: 1.7;
 }
 
 .faq-item.open .faq-answer {
-  max-height: 400px;
-  padding-top: 20px;
+  max-height: 300px;
+  padding-top: 16px;
 }
 
 /* Breadcrumb */
 .breadcrumb {
-  padding: 120px 80px 0;
-  font-size: 0.75rem;
+  padding: 100px 80px 0;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
 }
 
 .breadcrumb a {
   color: var(--text-dim);
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color 0.2s;
   cursor: pointer;
 }
 
 .breadcrumb a:hover { color: var(--accent); }
 
-.breadcrumb span { margin: 0 12px; color: var(--text-muted); }
+.breadcrumb span { margin: 0 8px; }
 
 /* Page header */
 .page-header {
-  padding: 40px 80px 120px;
-  max-width: 900px;
+  padding: 40px 80px 80px;
+  max-width: 800px;
 }
 
 .page-header h1 {
   font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 300;
-  margin-bottom: 32px;
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.page-header h1 em {
-  font-style: italic;
-  color: var(--accent);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400;
+  margin-bottom: 20px;
+  line-height: 1.15;
 }
 
 .page-header p {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-dim);
   line-height: 1.7;
-  font-weight: 300;
-  max-width: 600px;
 }
 
 /* Two column layout */
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 100px;
+  gap: 80px;
   align-items: start;
 }
 
-/* Info cards */
-.info-cards {
+/* Color swatches */
+.color-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  margin-top: 80px;
-  background: var(--border);
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.color-swatch {
+  aspect-ratio: 1;
+  border-radius: 8px;
   border: 1px solid var(--border);
+  transition: transform 0.2s;
+  cursor: pointer;
 }
 
-.info-card {
-  background: rgba(10,10,10,0.6);
-  backdrop-filter: blur(10px);
-  padding: 48px 36px;
-}
-
-.info-card .number {
-  font-family: var(--font-serif);
-  font-size: 3rem;
-  color: var(--accent);
-  margin-bottom: 16px;
-  font-weight: 300;
-  font-style: italic;
-}
-
-.info-card h4 {
-  font-size: 0.9rem;
-  margin-bottom: 12px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.info-card p {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  line-height: 1.7;
-  font-weight: 300;
-}
-
-/* Highlight box */
-.highlight-box {
-  border-left: 1px solid var(--accent);
-  padding: 40px 48px;
-  margin: 60px 0;
-  background: linear-gradient(90deg, rgba(201,169,97,0.03) 0%, transparent 100%);
-}
-
-.highlight-box p {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  color: var(--text);
-  line-height: 1.5;
-  font-weight: 300;
-  font-style: italic;
-}
+.color-swatch:hover { transform: scale(1.05); }
 
 /* Footer */
 .footer {
   background: var(--surface);
   border-top: 1px solid var(--border);
-  padding: 120px 80px 60px;
-  margin-top: 160px;
-  position: relative;
-  z-index: 3;
+  padding: 80px;
+  margin-top: 120px;
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 80px;
-  max-width: 1400px;
+  gap: 60px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .footer-brand {
   font-family: var(--font-serif);
-  font-size: 1.8rem;
-  margin-bottom: 24px;
-  font-weight: 300;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
 }
 
-.footer-brand em {
-  font-style: italic;
-  color: var(--accent);
-}
+.footer-brand span { color: var(--accent); }
 
 .footer-desc {
   font-size: 0.9rem;
   color: var(--text-dim);
-  line-height: 1.7;
-  max-width: 340px;
-  font-weight: 300;
+  line-height: 1.6;
+  max-width: 320px;
 }
 
 .footer h4 {
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   font-weight: 500;
 }
 
@@ -675,95 +453,140 @@ body {
   list-style: none;
 }
 
-.footer-links li { margin-bottom: 14px; }
+.footer-links li { margin-bottom: 12px; }
 
 .footer-links a {
   color: var(--text-dim);
   text-decoration: none;
   font-size: 0.9rem;
-  transition: color 0.3s;
+  transition: color 0.2s;
   cursor: pointer;
-  font-weight: 300;
 }
 
 .footer-links a:hover { color: var(--accent); }
 
 .footer-bottom {
-  max-width: 1400px;
-  margin: 80px auto 0;
-  padding-top: 40px;
+  max-width: 1200px;
+  margin: 60px auto 0;
+  padding-top: 32px;
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
 /* Scroll indicator */
 .scroll-indicator {
   position: absolute;
-  bottom: 60px;
-  left: 80px;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   color: var(--text-muted);
   font-size: 0.7rem;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  animation: scrollBounce 2s ease infinite;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
 }
 
 .scroll-indicator .line {
-  width: 60px;
-  height: 1px;
-  background: var(--text-muted);
-  position: relative;
-  overflow: hidden;
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--text-muted), transparent);
 }
 
-.scroll-indicator .line::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: var(--accent);
-  animation: scrollLine 2.5s ease-in-out infinite;
+/* Info cards */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
 }
 
-@keyframes scrollLine {
-  0% { left: -100%; }
-  50% { left: 0; }
-  100% { left: 100%; }
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 32px;
 }
 
-/* Internal link */
-.internal-link {
+.info-card .number {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
   color: var(--accent);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s;
-  cursor: pointer;
+  margin-bottom: 8px;
 }
 
-.internal-link:hover { border-bottom-color: var(--accent); }
-
-/* Page transition */
-.page-transition {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: var(--bg);
-  z-index: 99;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+.info-card h4 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
-.page-transition.active {
-  opacity: 1;
-  pointer-events: all;
+.info-card p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* Highlight box */
+.highlight-box {
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  padding: 32px 40px;
+  margin: 40px 0;
+}
+
+.highlight-box p {
+  font-size: 1.05rem;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero { padding: 0 40px; }
+  .content-section { padding: 80px 40px; }
+  .page-header { padding: 40px 40px 60px; }
+  .breadcrumb { padding: 100px 40px 0; }
+  .footer { padding: 60px 40px; }
+  .two-col { grid-template-columns: 1fr; gap: 40px; }
+  .info-cards { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-menu-btn { display: block; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 72px; left: 0; right: 0;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero { padding: 0 20px; }
+  .content-section { padding: 60px 20px; }
+  .page-header { padding: 30px 20px 40px; }
+  .breadcrumb { padding: 90px 20px 0; }
+  .footer { padding: 40px 20px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+  .process-step { grid-template-columns: 1fr; gap: 12px; }
+  .service-grid { grid-template-columns: 1fr; }
 }
 
 /* Loading */
@@ -777,8 +600,8 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 40px;
-  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 20px;
+  transition: opacity 0.6s ease;
 }
 
 .loader.hidden {
@@ -788,19 +611,13 @@ body {
 
 .loader-text {
   font-family: var(--font-serif);
-  font-size: 2rem;
-  color: var(--text);
-  letter-spacing: 0.2em;
-  font-weight: 300;
-}
-
-.loader-text em {
-  font-style: italic;
-  color: var(--accent);
+  font-size: 1.2rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
 }
 
 .loader-bar {
-  width: 200px;
+  width: 120px;
   height: 1px;
   background: var(--border);
   position: relative;
@@ -811,22 +628,22 @@ body {
   content: '';
   position: absolute;
   top: 0; left: 0;
-  width: 30%;
+  width: 40%;
   height: 100%;
   background: var(--accent);
-  animation: loadBar 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: loadBar 1.5s ease infinite;
 }
 
 @keyframes loadBar {
-  0% { left: -30%; }
+  0% { left: -40%; }
   100% { left: 100%; }
 }
 
 /* Animations */
 .fade-in {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .fade-in.visible {
@@ -834,60 +651,34 @@ body {
   transform: translateY(0);
 }
 
-/* Section divider */
-.section-divider {
-  width: 100%;
-  height: 1px;
-  background: var(--border);
-  margin: 0 auto;
-  max-width: 1400px;
-  position: relative;
-  z-index: 3;
+/* Internal link styling */
+.internal-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+  cursor: pointer;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .nav { padding: 0 40px; }
-  .hero { padding: 0 40px; }
-  .content-section { padding: 100px 40px; }
-  .page-header { padding: 40px 40px 80px; }
-  .breadcrumb { padding: 100px 40px 0; }
-  .footer { padding: 80px 40px 40px; }
-  .two-col { grid-template-columns: 1fr; gap: 60px; }
-  .info-cards { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
-  .process-step { grid-template-columns: 80px 1fr; gap: 30px; }
-  .step-number { font-size: 2.5rem; }
+.internal-link:hover {
+  border-bottom-color: var(--accent);
 }
 
-@media (max-width: 768px) {
-  .nav { padding: 0 24px; height: 70px; }
-  .nav-links { display: none; }
-  .nav-menu-btn { display: block; }
-  .nav-links.open {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 70px; left: 0; right: 0;
-    background: rgba(5,5,5,0.95);
-    backdrop-filter: blur(20px);
-    padding: 32px 24px;
-    border-bottom: 1px solid var(--border);
-    gap: 24px;
-  }
-  .hero { padding: 0 24px; }
-  .hero h1 { font-size: 3rem; }
-  .content-section { padding: 80px 24px; }
-  .page-header { padding: 30px 24px 60px; }
-  .breadcrumb { padding: 90px 24px 0; }
-  .footer { padding: 60px 24px 30px; }
-  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-  .footer-bottom { flex-direction: column; gap: 12px; }
-  .process-step { grid-template-columns: 1fr; gap: 16px; padding: 40px 0; }
-  .service-grid { grid-template-columns: 1fr; }
-  .scroll-indicator { left: 24px; bottom: 40px; }
-  .highlight-box { padding: 32px; }
-  .highlight-box p { font-size: 1.2rem; }
+/* Page transition overlay */
+.page-transition {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: var(--bg);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.page-transition.active {
+  opacity: 1;
+  pointer-events: all;
 }
 </style>
 </head>
@@ -895,7 +686,7 @@ body {
 
 <!-- Loader -->
 <div class="loader" id="loader">
-  <div class="loader-text">Auto<em>Craft</em></div>
+  <div class="loader-text">AUTOCRAFT</div>
   <div class="loader-bar"></div>
 </div>
 
@@ -905,19 +696,15 @@ body {
 <!-- 3D Canvas -->
 <div id="canvas-container"></div>
 
-<!-- Vignette & grain overlays -->
-<div class="vignette"></div>
-<div class="grain"></div>
-
 <!-- Navigation -->
-<nav class="nav" id="nav">
-  <a data-route="/" class="nav-logo">Auto<em>Craft</em></a>
+<nav class="nav">
+  <a data-route="/" class="nav-logo">Auto<span>Craft</span></a>
   <ul class="nav-links" id="navLinks">
     <li><a data-route="/" data-page="home">Home</a></li>
     <li><a data-route="/car-painting-process/" data-page="process">Process</a></li>
     <li><a data-route="/full-car-painting/" data-page="full">Full Painting</a></li>
-    <li><a data-route="/car-paint-repair/" data-page="repair">Repair</a></li>
-    <li><a data-route="/car-painting-colour-matching/" data-page="colour">Colour</a></li>
+    <li><a data-route="/car-paint-repair/" data-page="repair">Paint Repair</a></li>
+    <li><a data-route="/car-painting-colour-matching/" data-page="colour">Colour Matching</a></li>
     <li><a data-route="/car-painting-faq/" data-page="faq">FAQ</a></li>
   </ul>
   <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">☰</button>
@@ -927,88 +714,81 @@ body {
 <div class="page active" id="page-home">
   <section class="hero">
     <div class="hero-content">
-      <div class="hero-label">Automotive Refinishing</div>
-      <h1>Paintwork that <em>endures</em> beyond the finish.</h1>
-      <p>Master craftsmen applying factory-grade finishes to vehicles worth preserving. Every layer built on meticulous preparation.</p>
-      <a data-route="/car-painting-process/" class="hero-cta">
-        <span>Discover the Process</span>
-        <span class="arrow">→</span>
-      </a>
+      <div class="hero-label">Automotive Painting Services</div>
+      <h1>Precision paintwork for vehicles that matter</h1>
+      <p>From minor scratch repair to complete vehicle resprays, we deliver factory-quality finishes using professional-grade materials and proven techniques.</p>
+      <a data-route="/car-painting-process/" class="hero-cta">Explore Our Process →</a>
     </div>
     <div class="scroll-indicator">
-      <span>Scroll to explore</span>
+      <span>Scroll</span>
       <div class="line"></div>
     </div>
   </section>
 
   <section class="content-section">
-    <div class="section-label fade-in">The Craft</div>
-    <h2 class="section-title fade-in">Six disciplines. <em>One standard.</em></h2>
-    <p class="section-text fade-in">From a single stone chip to a complete respray, every job passes through the same preparation, application, and finishing standards. The difference between a finish that lasts a decade and one that fails in months is never the paint itself — it's everything that happens before the spray gun.</p>
+    <div class="section-label fade-in">What We Do</div>
+    <h2 class="section-title fade-in">Automotive painting services built around quality</h2>
+    <p class="section-text fade-in">We operate a dedicated paint facility equipped for everything from single-panel touch-ups to full vehicle refinishing. Every job follows the same preparation standards, regardless of scope.</p>
 
     <div class="service-grid">
       <a data-route="/car-painting-process/" class="service-card fade-in">
-        <div class="number">01</div>
         <h3>Car Painting</h3>
-        <p>Complete exterior refinishing using professional waterborne and solvent-based systems. For restoration, colour changes, or wear repair.</p>
-        <span class="link"><span class="line"></span>Learn more</span>
+        <p>Complete exterior refinishing using modern waterborne and solvent-based paint systems. Suitable for restoration, colour changes, and wear repair.</p>
+        <span class="arrow">Learn more →</span>
       </a>
       <a data-route="/full-car-painting/" class="service-card fade-in">
-        <div class="number">02</div>
         <h3>Full-Body Painting</h3>
-        <p>Comprehensive respray covering every exterior panel. Full strip-down, surface preparation, and multi-stage paint application.</p>
-        <span class="link"><span class="line"></span>Learn more</span>
+        <p>Comprehensive respray covering all exterior panels. Includes full strip-down, surface preparation, and multi-stage paint application.</p>
+        <span class="arrow">Learn more →</span>
       </a>
-      <a data-route="/car-paint-repair/" class="service-card fade-in">
-        <div class="number">03</div>
+      <a data-route="/car-painting-process/" class="service-card fade-in">
         <h3>Panel Painting</h3>
         <p>Targeted repair and repainting of individual body panels. Colour-matched to your existing finish with seamless blending.</p>
-        <span class="link"><span class="line"></span>Learn more</span>
+        <span class="arrow">Learn more →</span>
       </a>
       <a data-route="/car-paint-repair/" class="service-card fade-in">
-        <div class="number">04</div>
         <h3>Paint Repair</h3>
-        <p>Scratches, stone chips, and clear coat failure addressed with minimal intervention. Preserving surrounding factory finish.</p>
-        <span class="link"><span class="line"></span>Learn more</span>
+        <p>Scratches, stone chips, and clear coat failure addressed with minimal intervention. Preserves surrounding factory finish where possible.</p>
+        <span class="arrow">Learn more →</span>
       </a>
       <a data-route="/car-painting-colour-matching/" class="service-card fade-in">
-        <div class="number">05</div>
         <h3>Colour Matching</h3>
-        <p>Spectrophotometer-assisted matching against manufacturer codes and physical samples. Tested under multiple light sources.</p>
-        <span class="link"><span class="line"></span>Learn more</span>
+        <p>Spectrophotometer-assisted colour matching against manufacturer codes and physical samples. Tested under multiple light sources.</p>
+        <span class="arrow">Learn more →</span>
       </a>
       <a data-route="/car-painting-faq/" class="service-card fade-in">
-        <div class="number">06</div>
         <h3>Common Questions</h3>
         <p>Answers about pricing, timelines, preparation requirements, and what to expect from a professional paint job.</p>
-        <span class="link"><span class="line"></span>Read FAQ</span>
+        <span class="arrow">Read FAQ →</span>
       </a>
     </div>
   </section>
 
-  <section class="content-section">
-    <div class="two-col">
-      <div>
-        <div class="section-label fade-in">Our Approach</div>
-        <h2 class="section-title fade-in">Preparation <em>determines</em> the finish.</h2>
-        <p class="section-text fade-in" style="margin-bottom: 0;">The visible paint layer is only part of the work. Proper surface preparation, controlled environment conditions, and correct curing times are what separate a lasting finish from one that fails within months. We don't cut corners on any of these.</p>
-      </div>
-      <div>
-        <div class="info-cards" style="margin-top: 0;">
-          <div class="info-card fade-in">
-            <div class="number">15+</div>
-            <h4>Years</h4>
-            <p>Working with passenger vehicles, light commercial, and classic cars.</p>
-          </div>
-          <div class="info-card fade-in">
-            <div class="number">3</div>
-            <h4>Stages</h4>
-            <p>Primer, base coat, and clear coat applied in controlled conditions.</p>
-          </div>
-          <div class="info-card fade-in">
-            <div class="number">5yr</div>
-            <h4>Warranty</h4>
-            <p>Against peeling, fading, and clear coat failure under normal use.</p>
+  <section class="content-section" style="background: var(--surface); max-width: 100%; padding: 120px 80px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div class="two-col">
+        <div>
+          <div class="section-label fade-in">Our Approach</div>
+          <h2 class="section-title fade-in">Preparation determines the finish</h2>
+          <p class="section-text fade-in" style="margin-bottom: 0;">The visible paint layer is only part of the work. Proper surface preparation, controlled environment conditions, and correct curing times are what separate a lasting finish from one that fails within months. We don't cut corners on any of these.</p>
+        </div>
+        <div>
+          <div class="info-cards" style="margin-top: 0;">
+            <div class="info-card fade-in">
+              <div class="number">15+</div>
+              <h4>Years Experience</h4>
+              <p>Working with passenger vehicles, light commercial, and classic cars.</p>
+            </div>
+            <div class="info-card fade-in">
+              <div class="number">3</div>
+              <h4>Paint Stages</h4>
+              <p>Primer, base coat, and clear coat applied in controlled conditions.</p>
+            </div>
+            <div class="info-card fade-in">
+              <div class="number">5yr</div>
+              <h4>Finish Warranty</h4>
+              <p>Against peeling, fading, and clear coat failure under normal use.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -1017,7 +797,7 @@ body {
 
   <section class="content-section">
     <div class="section-label fade-in">Service Area</div>
-    <h2 class="section-title fade-in">Serving vehicle owners <em>locally</em></h2>
+    <h2 class="section-title fade-in">Serving vehicle owners locally</h2>
     <p class="section-text fade-in">Our workshop is located in the industrial district, convenient for drop-off and collection. We handle vehicles from all major manufacturers and work with insurance companies on approved repair claims. If you're unsure whether your vehicle needs a full respray or targeted repair, bring it in for an assessment — there's no charge for an initial inspection.</p>
 
     <div class="faq-list">
@@ -1053,7 +833,7 @@ body {
   </div>
   <div class="page-header">
     <div class="section-label">The Process</div>
-    <h1>How a professional <em>paint job</em> is done.</h1>
+    <h1>How a professional car paint job is done</h1>
     <p>Each stage builds on the one before it. Skipping or rushing any step shows up in the final finish — sometimes immediately, sometimes months later.</p>
   </div>
 
@@ -1125,10 +905,10 @@ body {
     </div>
   </section>
 
-  <section class="content-section">
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
     <div style="max-width: 800px; margin: 0 auto;">
       <div class="section-label fade-in">Common Questions</div>
-      <h2 class="section-title fade-in">About the <em>painting process</em></h2>
+      <h2 class="section-title fade-in">About the painting process</h2>
 
       <div class="faq-list">
         <div class="faq-item fade-in">
@@ -1178,14 +958,14 @@ body {
   </div>
   <div class="page-header">
     <div class="section-label">Full Respray</div>
-    <h1>Complete vehicle <em>repainting</em>.</h1>
+    <h1>Complete vehicle repainting</h1>
     <p>A full respray is the most thorough option for restoring or changing a vehicle's exterior finish. It involves stripping, preparing, and repainting every exterior panel to a consistent standard.</p>
   </div>
 
   <section class="content-section">
     <div class="two-col">
       <div>
-        <h2 class="section-title fade-in" style="font-size: 2.2rem;">When a full repaint <em>makes sense</em></h2>
+        <h2 class="section-title fade-in" style="font-size: 1.6rem;">When a full repaint makes sense</h2>
         <p class="section-text fade-in">Full resprays are appropriate when the existing finish has widespread failure — peeling clear coat, extensive fading across multiple panels, or heavy scratching. They're also the right choice for colour changes, restoration projects, or vehicles where panel-by-panel repair would leave visible inconsistencies.</p>
         <p class="section-text fade-in">If damage is limited to one or two panels and the surrounding paint is in good condition, a targeted repair is usually more practical and cost-effective.</p>
       </div>
@@ -1256,10 +1036,10 @@ body {
     </div>
   </section>
 
-  <section class="content-section">
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
     <div style="max-width: 800px; margin: 0 auto;">
       <div class="section-label fade-in">What Affects the Result</div>
-      <h2 class="section-title fade-in">Factors that influence <em>finish quality</em></h2>
+      <h2 class="section-title fade-in">Factors that influence finish quality</h2>
       <p class="section-text fade-in">The final appearance of a full respray depends on several factors beyond the painter's skill. Understanding these helps set realistic expectations.</p>
 
       <div class="faq-list">
@@ -1286,7 +1066,7 @@ body {
         </div>
       </div>
 
-      <p class="section-text fade-in" style="margin-top: 60px;">For vehicle owners in the local area, we offer drop-off and collection from our workshop. If you'd like to discuss a full respray for your vehicle, <a data-route="/car-painting-faq/" class="internal-link">see our FAQ</a> or get in touch for an assessment.</p>
+      <p class="section-text fade-in" style="margin-top: 48px;">For vehicle owners in the local area, we offer drop-off and collection from our workshop. If you'd like to discuss a full respray for your vehicle, <a data-route="/car-painting-faq/" class="internal-link">see our FAQ</a> or get in touch for an assessment.</p>
     </div>
   </section>
 </div>
@@ -1298,14 +1078,14 @@ body {
   </div>
   <div class="page-header">
     <div class="section-label">Paint Repair</div>
-    <h1>Targeted repair for <em>paint damage</em>.</h1>
+    <h1>Targeted repair for paint damage</h1>
     <p>Not every paint issue requires a full respray. Scratches, stone chips, and localised clear coat failure can often be repaired while preserving the surrounding factory finish.</p>
   </div>
 
   <section class="content-section">
     <div class="two-col">
       <div>
-        <h2 class="section-title fade-in" style="font-size: 2.2rem;">Types of damage <em>we repair</em></h2>
+        <h2 class="section-title fade-in" style="font-size: 1.6rem;">Types of damage we repair</h2>
         <p class="section-text fade-in">The most common paint issues we see are scratches from keys or shopping trolleys, stone chips on bonnets and bumpers, faded clear coat on horizontal surfaces, and peeling clear coat on older vehicles. Each requires a slightly different approach.</p>
       </div>
       <div>
@@ -1393,10 +1173,10 @@ body {
     </div>
   </section>
 
-  <section class="content-section">
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
     <div style="max-width: 800px; margin: 0 auto;">
       <div class="section-label fade-in">Customer Questions</div>
-      <h2 class="section-title fade-in">About <em>paint repair</em></h2>
+      <h2 class="section-title fade-in">About paint repair</h2>
 
       <div class="faq-list">
         <div class="faq-item fade-in">
@@ -1439,14 +1219,14 @@ body {
   </div>
   <div class="page-header">
     <div class="section-label">Colour Matching</div>
-    <h1>Accurate automotive <em>colour matching</em>.</h1>
+    <h1>Accurate automotive colour matching</h1>
     <p>Getting the colour right is one of the most technically demanding parts of automotive painting. Modern paint systems use complex formulations, and even small variations are visible to the eye.</p>
   </div>
 
   <section class="content-section">
     <div class="two-col">
       <div>
-        <h2 class="section-title fade-in" style="font-size: 2.2rem;">How colour matching <em>works</em></h2>
+        <h2 class="section-title fade-in" style="font-size: 1.6rem;">How colour matching works</h2>
         <p class="section-text fade-in">Every vehicle has a paint code, usually found on a plate in the door jamb, under the bonnet, or in the boot. This code identifies the original colour formula. We use this as our starting point.</p>
         <p class="section-text fade-in">For vehicles where the original paint has faded or been previously repaired, we use a spectrophotometer to read the actual colour and adjust the mix accordingly. Test panels are sprayed and compared under different lighting conditions before we apply paint to your vehicle.</p>
       </div>
@@ -1510,10 +1290,10 @@ body {
     </div>
   </section>
 
-  <section class="content-section">
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
     <div style="max-width: 800px; margin: 0 auto;">
       <div class="section-label fade-in">Why Blending Matters</div>
-      <h2 class="section-title fade-in">Understanding <em>panel blending</em></h2>
+      <h2 class="section-title fade-in">Understanding panel blending</h2>
       <p class="section-text fade-in">When repairing a single panel, the new paint needs to blend into the adjacent panels. This is because even a perfect colour match can look different if the application technique or clear coat thickness varies. Blending involves spraying a light coat of colour over the neighbouring panels to create a smooth transition.</p>
       <p class="section-text fade-in">This is standard practice in professional auto body work and is necessary for an invisible repair. It doesn't mean we're repainting entire panels — just feathering the colour at the edges.</p>
 
@@ -1551,13 +1331,13 @@ body {
   </div>
   <div class="page-header">
     <div class="section-label">FAQ</div>
-    <h1>Questions about <em>car painting</em>.</h1>
+    <h1>Questions about car painting</h1>
     <p>Straightforward answers to the questions we hear most often. If yours isn't here, get in touch and we'll help.</p>
   </div>
 
   <section class="content-section">
     <div class="section-label fade-in">Cost & Pricing</div>
-    <h2 class="section-title fade-in">Car painting <em>cost factors</em></h2>
+    <h2 class="section-title fade-in">Car painting cost factors</h2>
     <p class="section-text fade-in">Pricing depends on the scope of work, vehicle size, paint system, and body condition. Here are the main factors that affect cost.</p>
 
     <div class="faq-list">
@@ -1585,10 +1365,10 @@ body {
     </div>
   </section>
 
-  <section class="content-section">
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
     <div style="max-width: 800px; margin: 0 auto;">
       <div class="section-label fade-in">Timing</div>
-      <h2 class="section-title fade-in">Painting time & <em>scheduling</em></h2>
+      <h2 class="section-title fade-in">Painting time & scheduling</h2>
 
       <div class="faq-list">
         <div class="faq-item fade-in">
@@ -1611,7 +1391,7 @@ body {
 
   <section class="content-section">
     <div class="section-label fade-in">Preparation & Aftercare</div>
-    <h2 class="section-title fade-in">Before and <em>after painting</em></h2>
+    <h2 class="section-title fade-in">Before and after painting</h2>
 
     <div class="faq-list">
       <div class="faq-item fade-in">
@@ -1638,10 +1418,10 @@ body {
     </div>
   </section>
 
-  <section class="content-section">
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
     <div style="max-width: 800px; margin: 0 auto;">
       <div class="section-label fade-in">Insurance & Claims</div>
-      <h2 class="section-title fade-in">Insurance-related <em>repairs</em></h2>
+      <h2 class="section-title fade-in">Insurance-related repairs</h2>
 
       <div class="faq-list">
         <div class="faq-item fade-in">
@@ -1664,12 +1444,9 @@ body {
 
   <section class="content-section">
     <div class="section-label fade-in">Still Have Questions?</div>
-    <h2 class="section-title fade-in">Get in <em>touch</em></h2>
+    <h2 class="section-title fade-in">Get in touch</h2>
     <p class="section-text fade-in">If your question isn't answered here, we're happy to help. Bring your vehicle in for a free assessment, or contact us to discuss your requirements.</p>
-    <a data-route="/" class="hero-cta">
-      <span>Back to Home</span>
-      <span class="arrow">→</span>
-    </a>
+    <a data-route="/" class="hero-cta">Back to Home →</a>
   </section>
 </div>
 
@@ -1677,7 +1454,7 @@ body {
 <footer class="footer">
   <div class="footer-grid">
     <div>
-      <div class="footer-brand">Auto<em>Craft</em></div>
+      <div class="footer-brand">Auto<span>Craft</span></div>
       <p class="footer-desc">Professional automotive painting and auto body services. Quality finishes built on thorough preparation and proven technique.</p>
     </div>
     <div>
@@ -1708,483 +1485,85 @@ body {
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 AutoCraft Painting</span>
-    <span>Professional automotive refinishing</span>
+    <span>© 2026 AutoCraft Painting. All rights reserved.</span>
+    <span>Professional automotive refinishing services</span>
   </div>
 </footer>
 
 <script>
-// ============================================
-// THREE.JS SCENE — CINEMATIC STUDIO SETUP
-// ============================================
-let scene, camera, renderer, car, clock;
+// Three.js Scene Setup
+let scene, camera, renderer, car, workshop;
 let scrollProgress = 0;
-let targetScrollProgress = 0;
 let currentPage = 'home';
-let mouseX = 0, mouseY = 0;
-let targetMouseX = 0, targetMouseY = 0;
-let particles;
+let animationFrame;
+let clock;
 
 const container = document.getElementById('canvas-container');
 
 function init() {
   clock = new THREE.Clock();
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x000000, 0.025);
+  scene.fog = new THREE.FogExp2(0x0a0a0a, 0.035);
 
-  camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(7, 2.5, 7);
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(6, 3, 8);
   camera.lookAt(0, 0.5, 0);
 
-  renderer = new THREE.WebGLRenderer({ 
-    antialias: true, 
-    alpha: true,
-    powerPreference: 'high-performance'
-  });
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.1;
+  renderer.toneMappingExposure = 1.0;
   renderer.outputEncoding = THREE.sRGBEncoding;
-  renderer.physicallyCorrectLights = true;
   container.appendChild(renderer.domElement);
 
-  setupLighting();
-  createStudioEnvironment();
+  // Lighting
+  const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+  scene.add(ambientLight);
+
+  // Main overhead light
+  const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  mainLight.position.set(5, 10, 5);
+  mainLight.castShadow = true;
+  mainLight.shadow.mapSize.width = 2048;
+  mainLight.shadow.mapSize.height = 2048;
+  mainLight.shadow.camera.near = 0.5;
+  mainLight.shadow.camera.far = 50;
+  mainLight.shadow.camera.left = -10;
+  mainLight.shadow.camera.right = 10;
+  mainLight.shadow.camera.top = 10;
+  mainLight.shadow.camera.bottom = -10;
+  scene.add(mainLight);
+
+  // Fill lights
+  const fillLight1 = new THREE.DirectionalLight(0xc8d8e8, 0.4);
+  fillLight1.position.set(-5, 5, -5);
+  scene.add(fillLight1);
+
+  const fillLight2 = new THREE.DirectionalLight(0xffe8d0, 0.3);
+  fillLight2.position.set(0, 3, -8);
+  scene.add(fillLight2);
+
+  // Workshop environment
+  createWorkshop();
+
+  // Car
   createCar();
-  createParticles();
+
+  // Environment map for reflections
   createEnvironmentMap();
 
   window.addEventListener('resize', onResize);
   window.addEventListener('scroll', onScroll);
-  window.addEventListener('mousemove', onMouseMove);
 
   animate();
 
+  // Hide loader
   setTimeout(() => {
     document.getElementById('loader').classList.add('hidden');
-  }, 1800);
-}
-
-function setupLighting() {
-  // Ambient
-  const ambient = new THREE.AmbientLight(0x1a1a2e, 0.3);
-  scene.add(ambient);
-
-  // Key light — warm, dramatic, from above-right
-  const keyLight = new THREE.SpotLight(0xffd9a8, 3, 30, Math.PI / 5, 0.5, 1.5);
-  keyLight.position.set(5, 8, 4);
-  keyLight.target.position.set(0, 0.5, 0);
-  keyLight.castShadow = true;
-  keyLight.shadow.mapSize.width = 2048;
-  keyLight.shadow.mapSize.height = 2048;
-  keyLight.shadow.camera.near = 1;
-  keyLight.shadow.camera.far = 20;
-  keyLight.shadow.bias = -0.0005;
-  scene.add(keyLight);
-  scene.add(keyLight.target);
-
-  // Fill light — cool, from left
-  const fillLight = new THREE.SpotLight(0x88a8d8, 1.5, 25, Math.PI / 4, 0.6, 1.5);
-  fillLight.position.set(-6, 5, -2);
-  fillLight.target.position.set(0, 0.5, 0);
-  scene.add(fillLight);
-  scene.add(fillLight.target);
-
-  // Rim light — behind, strong edge highlight
-  const rimLight = new THREE.SpotLight(0xffc878, 2.5, 20, Math.PI / 6, 0.4, 1.5);
-  rimLight.position.set(-3, 4, -6);
-  rimLight.target.position.set(0, 0.5, 0);
-  scene.add(rimLight);
-  scene.add(rimLight.target);
-
-  // Top accent light
-  const topLight = new THREE.PointLight(0xffffff, 1.2, 15);
-  topLight.position.set(0, 7, 0);
-  scene.add(topLight);
-
-  // Ground bounce light
-  const bounceLight = new THREE.PointLight(0x3a3a4a, 0.4, 10);
-  bounceLight.position.set(0, -1, 3);
-  scene.add(bounceLight);
-}
-
-function createStudioEnvironment() {
-  // Reflective floor
-  const floorGeometry = new THREE.PlaneGeometry(40, 40);
-  const floorMaterial = new THREE.MeshStandardMaterial({
-    color: 0x0a0a0a,
-    roughness: 0.3,
-    metalness: 0.6,
-    envMapIntensity: 0.5
-  });
-  const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.y = -0.01;
-  floor.receiveShadow = true;
-  scene.add(floor);
-
-  // Subtle circular platform
-  const platformGeometry = new THREE.CylinderGeometry(4, 4.2, 0.05, 64);
-  const platformMaterial = new THREE.MeshStandardMaterial({
-    color: 0x1a1a1a,
-    roughness: 0.4,
-    metalness: 0.5
-  });
-  const platform = new THREE.Mesh(platformGeometry, platformMaterial);
-  platform.position.y = 0.02;
-  platform.receiveShadow = true;
-  scene.add(platform);
-
-  // Platform ring
-  const ringGeometry = new THREE.TorusGeometry(4.1, 0.02, 8, 64);
-  const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xc9a961, transparent: true, opacity: 0.3 });
-  const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-  ring.rotation.x = -Math.PI / 2;
-  ring.position.y = 0.06;
-  scene.add(ring);
-
-  // Background cyclorama walls
-  const wallMaterial = new THREE.MeshStandardMaterial({
-    color: 0x050505,
-    roughness: 0.95,
-    metalness: 0.0
-  });
-
-  const backWall = new THREE.Mesh(new THREE.PlaneGeometry(40, 15), wallMaterial);
-  backWall.position.set(0, 7.5, -12);
-  scene.add(backWall);
-
-  // Light beams (volumetric effect using transparent planes)
-  const beamMaterial = new THREE.MeshBasicMaterial({
-    color: 0xffd9a8,
-    transparent: true,
-    opacity: 0.03,
-    side: THREE.DoubleSide,
-    blending: THREE.AdditiveBlending
-  });
-
-  for (let i = 0; i < 3; i++) {
-    const beam = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 10), beamMaterial);
-    beam.position.set(-2 + i * 2, 4, -3);
-    beam.rotation.y = Math.PI / 6;
-    beam.rotation.z = 0.2;
-    scene.add(beam);
-  }
-}
-
-function createCar() {
-  car = new THREE.Group();
-
-  // Premium metallic paint material
-  const paintMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x0a1a3a,
-    metalness: 0.85,
-    roughness: 0.18,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.05,
-    reflectivity: 1.0,
-    envMapIntensity: 1.5
-  });
-
-  // Glass material
-  const glassMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x0a0a15,
-    metalness: 0.1,
-    roughness: 0.05,
-    transparent: true,
-    opacity: 0.5,
-    transmission: 0.6,
-    ior: 1.5,
-    reflectivity: 0.9
-  });
-
-  // Chrome material
-  const chromeMaterial = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    metalness: 1.0,
-    roughness: 0.05,
-    envMapIntensity: 2.0
-  });
-
-  // Dark plastic/rubber
-  const darkMaterial = new THREE.MeshStandardMaterial({
-    color: 0x0a0a0a,
-    roughness: 0.8,
-    metalness: 0.1
-  });
-
-  // Tire material
-  const tireMaterial = new THREE.MeshStandardMaterial({
-    color: 0x0a0a0a,
-    roughness: 0.9,
-    metalness: 0.0
-  });
-
-  // ===== MAIN BODY =====
-  // Lower body - sleek sedan shape
-  const bodyLower = new THREE.Mesh(
-    new THREE.BoxGeometry(4.2, 0.6, 1.8),
-    paintMaterial
-  );
-  bodyLower.position.y = 0.5;
-  bodyLower.castShadow = true;
-  bodyLower.receiveShadow = true;
-  car.add(bodyLower);
-
-  // Body sides - rounded
-  const bodySideGeo = new THREE.CylinderGeometry(0.9, 0.9, 4.2, 32, 1, false, 0, Math.PI);
-  const bodySide = new THREE.Mesh(bodySideGeo, paintMaterial);
-  bodySide.rotation.z = Math.PI / 2;
-  bodySide.rotation.y = Math.PI / 2;
-  bodySide.position.y = 0.5;
-  bodySide.scale.set(1, 1, 1);
-  bodySide.castShadow = true;
-  car.add(bodySide);
-
-  // Hood - sloped front
-  const hoodGeo = new THREE.BoxGeometry(1.4, 0.15, 1.7);
-  const hood = new THREE.Mesh(hoodGeo, paintMaterial);
-  hood.position.set(-1.3, 0.95, 0);
-  hood.rotation.z = -0.15;
-  hood.castShadow = true;
-  car.add(hood);
-
-  // Trunk - sloped back
-  const trunkGeo = new THREE.BoxGeometry(1.2, 0.15, 1.7);
-  const trunk = new THREE.Mesh(trunkGeo, paintMaterial);
-  trunk.position.set(1.3, 0.9, 0);
-  trunk.rotation.z = 0.15;
-  trunk.castShadow = true;
-  car.add(trunk);
-
-  // Cabin / greenhouse
-  const cabinGeo = new THREE.BoxGeometry(2.2, 0.7, 1.6);
-  const cabin = new THREE.Mesh(cabinGeo, paintMaterial);
-  cabin.position.set(-0.1, 1.2, 0);
-  cabin.castShadow = true;
-  car.add(cabin);
-
-  // Roof - rounded
-  const roofGeo = new THREE.CylinderGeometry(0.8, 0.8, 2.2, 32, 1, false, 0, Math.PI);
-  const roof = new THREE.Mesh(roofGeo, paintMaterial);
-  roof.rotation.z = Math.PI / 2;
-  roof.rotation.y = Math.PI / 2;
-  roof.position.set(-0.1, 1.2, 0);
-  roof.scale.set(1, 1, 1);
-  roof.castShadow = true;
-  car.add(roof);
-
-  // ===== WINDOWS =====
-  // Windshield
-  const windshieldGeo = new THREE.PlaneGeometry(1.5, 0.65);
-  const windshield = new THREE.Mesh(windshieldGeo, glassMaterial);
-  windshield.position.set(-1.0, 1.25, 0);
-  windshield.rotation.y = -Math.PI / 2;
-  windshield.rotation.x = 0;
-  windshield.rotation.z = 0.4;
-  car.add(windshield);
-
-  // Rear window
-  const rearWindow = new THREE.Mesh(windshieldGeo, glassMaterial);
-  rearWindow.position.set(0.85, 1.2, 0);
-  rearWindow.rotation.y = Math.PI / 2;
-  rearWindow.rotation.z = -0.35;
-  car.add(rearWindow);
-
-  // Side windows
-  const sideWindowGeo = new THREE.PlaneGeometry(1.8, 0.5);
-  const sideWindowL = new THREE.Mesh(sideWindowGeo, glassMaterial);
-  sideWindowL.position.set(-0.1, 1.25, 0.81);
-  car.add(sideWindowL);
-
-  const sideWindowR = new THREE.Mesh(sideWindowGeo, glassMaterial);
-  sideWindowR.position.set(-0.1, 1.25, -0.81);
-  sideWindowR.rotation.y = Math.PI;
-  car.add(sideWindowR);
-
-  // ===== FRONT DETAILS =====
-  // Headlights
-  const headlightGeo = new THREE.BoxGeometry(0.15, 0.15, 0.5);
-  const headlightMat = new THREE.MeshBasicMaterial({ 
-    color: 0xfff5e0,
-    transparent: true,
-    opacity: 0.9
-  });
-  
-  const headlightL = new THREE.Mesh(headlightGeo, headlightMat);
-  headlightL.position.set(-2.1, 0.65, 0.55);
-  car.add(headlightL);
-  
-  const headlightR = new THREE.Mesh(headlightGeo, headlightMat);
-  headlightR.position.set(-2.1, 0.65, -0.55);
-  car.add(headlightR);
-
-  // Headlight glow
-  const headlightGlowMat = new THREE.MeshBasicMaterial({
-    color: 0xfff5e0,
-    transparent: true,
-    opacity: 0.3,
-    blending: THREE.AdditiveBlending
-  });
-  
-  const glowL = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), headlightGlowMat);
-  glowL.position.set(-2.1, 0.65, 0.55);
-  car.add(glowL);
-  
-  const glowR = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), headlightGlowMat);
-  glowR.position.set(-2.1, 0.65, -0.55);
-  car.add(glowR);
-
-  // Grille
-  const grilleGeo = new THREE.BoxGeometry(0.05, 0.2, 1.2);
-  const grille = new THREE.Mesh(grilleGeo, darkMaterial);
-  grille.position.set(-2.12, 0.45, 0);
-  car.add(grille);
-
-  // Front bumper
-  const bumperGeo = new THREE.BoxGeometry(0.2, 0.3, 1.8);
-  const bumper = new THREE.Mesh(bumperGeo, paintMaterial);
-  bumper.position.set(-2.1, 0.35, 0);
-  bumper.castShadow = true;
-  car.add(bumper);
-
-  // ===== REAR DETAILS =====
-  // Taillights
-  const taillightMat = new THREE.MeshBasicMaterial({ color: 0xff1a1a });
-  
-  const taillightL = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.15, 0.4), taillightMat);
-  taillightL.position.set(2.1, 0.65, 0.55);
-  car.add(taillightL);
-  
-  const taillightR = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.15, 0.4), taillightMat);
-  taillightR.position.set(2.1, 0.65, -0.55);
-  car.add(taillightR);
-
-  // Rear bumper
-  const rearBumper = new THREE.Mesh(bumperGeo, paintMaterial);
-  rearBumper.position.set(2.1, 0.35, 0);
-  rearBumper.castShadow = true;
-  car.add(rearBumper);
-
-  // ===== WHEELS =====
-  const wheelPositions = [
-    [-1.4, 0.35, 0.95],
-    [-1.4, 0.35, -0.95],
-    [1.4, 0.35, 0.95],
-    [1.4, 0.35, -0.95]
-  ];
-
-  wheelPositions.forEach(pos => {
-    const wheelGroup = new THREE.Group();
-    
-    // Tire
-    const tire = new THREE.Mesh(
-      new THREE.TorusGeometry(0.35, 0.12, 16, 32),
-      tireMaterial
-    );
-    tire.rotation.y = Math.PI / 2;
-    tire.castShadow = true;
-    wheelGroup.add(tire);
-
-    // Rim
-    const rim = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.28, 0.28, 0.18, 24),
-      chromeMaterial
-    );
-    rim.rotation.x = Math.PI / 2;
-    wheelGroup.add(rim);
-
-    // Rim center
-    const rimCenter = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08, 0.08, 0.2, 16),
-      darkMaterial
-    );
-    rimCenter.rotation.x = Math.PI / 2;
-    wheelGroup.add(rimCenter);
-
-    // Spokes
-    for (let i = 0; i < 5; i++) {
-      const spoke = new THREE.Mesh(
-        new THREE.BoxGeometry(0.04, 0.22, 0.04),
-        chromeMaterial
-      );
-      spoke.rotation.z = (i / 5) * Math.PI * 2;
-      spoke.position.x = Math.cos((i / 5) * Math.PI * 2) * 0.13;
-      spoke.position.y = Math.sin((i / 5) * Math.PI * 2) * 0.13;
-      wheelGroup.add(spoke);
-    }
-
-    wheelGroup.position.set(...pos);
-    car.add(wheelGroup);
-  });
-
-  // ===== DOOR LINES =====
-  const doorLineMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
-  
-  const doorLine1 = new THREE.Mesh(new THREE.BoxGeometry(0.01, 0.5, 1.8), doorLineMat);
-  doorLine1.position.set(-0.5, 0.7, 0);
-  car.add(doorLine1);
-
-  const doorLine2 = new THREE.Mesh(new THREE.BoxGeometry(0.01, 0.5, 1.8), doorLineMat);
-  doorLine2.position.set(0.4, 0.7, 0);
-  car.add(doorLine2);
-
-  // ===== SIDE MIRRORS =====
-  const mirrorGeo = new THREE.BoxGeometry(0.15, 0.1, 0.12);
-  const mirrorL = new THREE.Mesh(mirrorGeo, paintMaterial);
-  mirrorL.position.set(-0.9, 1.1, 0.95);
-  car.add(mirrorL);
-  
-  const mirrorR = new THREE.Mesh(mirrorGeo, paintMaterial);
-  mirrorR.position.set(-0.9, 1.1, -0.95);
-  car.add(mirrorR);
-
-  // ===== DOOR HANDLES =====
-  const handleGeo = new THREE.BoxGeometry(0.2, 0.03, 0.03);
-  
-  const handleL = new THREE.Mesh(handleGeo, chromeMaterial);
-  handleL.position.set(-0.2, 0.75, 0.91);
-  car.add(handleL);
-  
-  const handleR = new THREE.Mesh(handleGeo, chromeMaterial);
-  handleR.position.set(-0.2, 0.75, -0.91);
-  car.add(handleR);
-
-  // Position car on platform
-  car.position.y = 0;
-  scene.add(car);
-}
-
-function createParticles() {
-  const particleCount = 200;
-  const geometry = new THREE.BufferGeometry();
-  const positions = new Float32Array(particleCount * 3);
-  const sizes = new Float32Array(particleCount);
-
-  for (let i = 0; i < particleCount; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 20;
-    positions[i * 3 + 1] = Math.random() * 8;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
-    sizes[i] = Math.random() * 0.02 + 0.005;
-  }
-
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-  const material = new THREE.PointsMaterial({
-    color: 0xffd9a8,
-    size: 0.03,
-    transparent: true,
-    opacity: 0.4,
-    blending: THREE.AdditiveBlending,
-    sizeAttenuation: true
-  });
-
-  particles = new THREE.Points(geometry, material);
-  scene.add(particles);
+  }, 1500);
 }
 
 function createEnvironmentMap() {
@@ -2192,43 +1571,25 @@ function createEnvironmentMap() {
   pmremGenerator.compileEquirectangularShader();
 
   const envScene = new THREE.Scene();
-  envScene.background = new THREE.Color(0x050505);
+  envScene.background = new THREE.Color(0x1a1a1a);
 
-  // Studio lights for reflections
-  const envLight1 = new THREE.PointLight(0xffd9a8, 3, 30);
+  const envLight1 = new THREE.PointLight(0xffffff, 2, 20);
   envLight1.position.set(5, 5, 5);
   envScene.add(envLight1);
 
-  const envLight2 = new THREE.PointLight(0x88a8d8, 2, 30);
+  const envLight2 = new THREE.PointLight(0xc8d8e8, 1.5, 20);
   envLight2.position.set(-5, 5, -5);
   envScene.add(envLight2);
 
-  const envLight3 = new THREE.PointLight(0xffc878, 2, 30);
-  envLight3.position.set(-3, 3, -6);
+  const envLight3 = new THREE.PointLight(0xffe8d0, 1, 20);
+  envLight3.position.set(0, 8, 0);
   envScene.add(envLight3);
 
-  const envLight4 = new THREE.PointLight(0xffffff, 1.5, 30);
-  envLight4.position.set(0, 8, 0);
-  envScene.add(envLight4);
-
-  // Studio walls
   const envBox = new THREE.Mesh(
-    new THREE.BoxGeometry(30, 15, 30),
-    new THREE.MeshBasicMaterial({ color: 0x0a0a0a, side: THREE.BackSide })
+    new THREE.BoxGeometry(20, 10, 20),
+    new THREE.MeshBasicMaterial({ color: 0x222222, side: THREE.BackSide })
   );
   envScene.add(envBox);
-
-  // Bright panels for reflections
-  const panelMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  const panel1 = new THREE.Mesh(new THREE.PlaneGeometry(4, 2), panelMat);
-  panel1.position.set(5, 5, 0);
-  panel1.rotation.y = -Math.PI / 2;
-  envScene.add(panel1);
-
-  const panel2 = new THREE.Mesh(new THREE.PlaneGeometry(4, 2), panelMat);
-  panel2.position.set(-5, 5, 0);
-  panel2.rotation.y = Math.PI / 2;
-  envScene.add(panel2);
 
   const envMap = pmremGenerator.fromScene(envScene, 0.04).texture;
   scene.environment = envMap;
@@ -2240,6 +1601,197 @@ function createEnvironmentMap() {
   });
 }
 
+function createWorkshop() {
+  workshop = new THREE.Group();
+
+  const floorGeometry = new THREE.PlaneGeometry(30, 30);
+  const floorMaterial = new THREE.MeshStandardMaterial({
+    color: 0x2a2a2a,
+    roughness: 0.7,
+    metalness: 0.1
+  });
+  const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -0.01;
+  floor.receiveShadow = true;
+  workshop.add(floor);
+
+  const gridHelper = new THREE.GridHelper(30, 30, 0x333333, 0x222222);
+  gridHelper.position.y = 0.01;
+  workshop.add(gridHelper);
+
+  const wallGeometry = new THREE.PlaneGeometry(30, 10);
+  const wallMaterial = new THREE.MeshStandardMaterial({
+    color: 0x1a1a1a,
+    roughness: 0.9,
+    metalness: 0.0
+  });
+  const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  backWall.position.set(0, 5, -10);
+  workshop.add(backWall);
+
+  const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  leftWall.position.set(-10, 5, 0);
+  leftWall.rotation.y = Math.PI / 2;
+  workshop.add(leftWall);
+
+  const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  rightWall.position.set(10, 5, 0);
+  rightWall.rotation.y = -Math.PI / 2;
+  workshop.add(rightWall);
+
+  for (let i = -2; i <= 2; i++) {
+    const lightFixture = new THREE.Mesh(
+      new THREE.BoxGeometry(0.3, 0.1, 4),
+      new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    lightFixture.position.set(i * 3, 8, -2);
+    workshop.add(lightFixture);
+
+    const lightGlow = new THREE.PointLight(0xffffff, 0.5, 10);
+    lightGlow.position.set(i * 3, 7.5, -2);
+    workshop.add(lightGlow);
+  }
+
+  const cabinetGeometry = new THREE.BoxGeometry(2, 1.5, 0.8);
+  const cabinetMaterial = new THREE.MeshStandardMaterial({
+    color: 0x3a3a3a,
+    roughness: 0.5,
+    metalness: 0.3
+  });
+  const cabinet = new THREE.Mesh(cabinetGeometry, cabinetMaterial);
+  cabinet.position.set(-6, 0.75, -6);
+  cabinet.castShadow = true;
+  workshop.add(cabinet);
+
+  const cabinet2 = cabinet.clone();
+  cabinet2.position.set(6, 0.75, -6);
+  workshop.add(cabinet2);
+
+  scene.add(workshop);
+}
+
+function createCar() {
+  car = new THREE.Group();
+
+  const bodyShape = new THREE.Shape();
+  bodyShape.moveTo(-2.2, 0.3);
+  bodyShape.lineTo(-2.0, 0.3);
+  bodyShape.lineTo(-1.8, 0.5);
+  bodyShape.lineTo(-1.5, 0.6);
+  bodyShape.lineTo(-1.0, 0.6);
+  bodyShape.lineTo(-0.8, 0.9);
+  bodyShape.lineTo(-0.5, 1.1);
+  bodyShape.lineTo(0.5, 1.1);
+  bodyShape.lineTo(0.8, 0.9);
+  bodyShape.lineTo(1.0, 0.6);
+  bodyShape.lineTo(1.5, 0.6);
+  bodyShape.lineTo(1.8, 0.5);
+  bodyShape.lineTo(2.0, 0.3);
+  bodyShape.lineTo(2.2, 0.3);
+  bodyShape.lineTo(2.2, 0.0);
+  bodyShape.lineTo(-2.2, 0.0);
+  bodyShape.lineTo(-2.2, 0.3);
+
+  const extrudeSettings = {
+    depth: 1.6,
+    bevelEnabled: true,
+    bevelThickness: 0.05,
+    bevelSize: 0.05,
+    bevelSegments: 3
+  };
+
+  const bodyGeometry = new THREE.ExtrudeGeometry(bodyShape, extrudeSettings);
+  bodyGeometry.center();
+
+  const paintMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x1a3a5c,
+    metalness: 0.7,
+    roughness: 0.2,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.1,
+    reflectivity: 1.0
+  });
+
+  const body = new THREE.Mesh(bodyGeometry, paintMaterial);
+  body.position.y = 0.5;
+  body.castShadow = true;
+  body.receiveShadow = true;
+  car.add(body);
+
+  const windowMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x111111,
+    metalness: 0.9,
+    roughness: 0.1,
+    transparent: true,
+    opacity: 0.7
+  });
+
+  const windshieldGeometry = new THREE.PlaneGeometry(1.2, 0.5);
+  const windshield = new THREE.Mesh(windshieldGeometry, windowMaterial);
+  windshield.position.set(-0.3, 1.3, 0);
+  windshield.rotation.y = Math.PI / 2;
+  windshield.rotation.z = 0.3;
+  car.add(windshield);
+
+  const wheelGeometry = new THREE.CylinderGeometry(0.35, 0.35, 0.25, 16);
+  const wheelMaterial = new THREE.MeshStandardMaterial({
+    color: 0x111111,
+    roughness: 0.8,
+    metalness: 0.2
+  });
+
+  const wheelPositions = [
+    [-1.4, 0.35, 0.9],
+    [-1.4, 0.35, -0.9],
+    [1.4, 0.35, 0.9],
+    [1.4, 0.35, -0.9]
+  ];
+
+  wheelPositions.forEach(pos => {
+    const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+    wheel.position.set(...pos);
+    wheel.rotation.x = Math.PI / 2;
+    wheel.castShadow = true;
+    car.add(wheel);
+
+    const rimGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.26, 8);
+    const rimMaterial = new THREE.MeshStandardMaterial({
+      color: 0x888888,
+      roughness: 0.3,
+      metalness: 0.8
+    });
+    const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+    rim.position.set(...pos);
+    rim.rotation.x = Math.PI / 2;
+    car.add(rim);
+  });
+
+  const headlightGeometry = new THREE.SphereGeometry(0.15, 8, 8);
+  const headlightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffee });
+
+  const headlight1 = new THREE.Mesh(headlightGeometry, headlightMaterial);
+  headlight1.position.set(-2.1, 0.5, 0.5);
+  car.add(headlight1);
+
+  const headlight2 = headlight1.clone();
+  headlight2.position.set(-2.1, 0.5, -0.5);
+  car.add(headlight2);
+
+  const taillightMaterial = new THREE.MeshBasicMaterial({ color: 0xff2222 });
+
+  const taillight1 = new THREE.Mesh(headlightGeometry, taillightMaterial);
+  taillight1.position.set(2.1, 0.5, 0.5);
+  car.add(taillight1);
+
+  const taillight2 = taillight1.clone();
+  taillight2.position.set(2.1, 0.5, -0.5);
+  car.add(taillight2);
+
+  car.position.y = 0;
+  scene.add(car);
+}
+
 function onResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -2249,85 +1801,47 @@ function onResize() {
 function onScroll() {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  targetScrollProgress = docHeight > 0 ? scrollTop / docHeight : 0;
-}
-
-function onMouseMove(e) {
-  targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-  targetMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  scrollProgress = docHeight > 0 ? scrollTop / docHeight : 0;
 }
 
 function animate() {
-  requestAnimationFrame(animate);
+  animationFrame = requestAnimationFrame(animate);
 
   const time = clock.getElapsedTime();
 
-  // Smooth scroll interpolation
-  scrollProgress += (targetScrollProgress - scrollProgress) * 0.08;
-  mouseX += (targetMouseX - mouseX) * 0.05;
-  mouseY += (targetMouseY - mouseY) * 0.05;
-
   if (car) {
-    // Page-specific animations
     if (currentPage === 'home') {
-      // Slow cinematic rotation with scroll
-      car.rotation.y = scrollProgress * Math.PI * 2.5 + time * 0.05;
-      car.position.y = Math.sin(time * 0.5) * 0.02;
+      car.rotation.y = scrollProgress * Math.PI * 2;
+      car.position.y = Math.sin(scrollProgress * Math.PI) * 0.2;
     } else if (currentPage === 'process') {
-      car.rotation.y = scrollProgress * Math.PI * 2 + time * 0.03;
-      car.position.y = 0;
+      car.rotation.y = scrollProgress * Math.PI * 1.5;
     } else if (currentPage === 'full') {
-      car.rotation.y = scrollProgress * Math.PI * 1.5 + Math.PI * 0.25;
-      car.position.y = 0;
+      car.rotation.y = scrollProgress * Math.PI;
     } else if (currentPage === 'repair') {
-      // Close-up feel - slower, more subtle
-      car.rotation.y = Math.sin(time * 0.2) * 0.3 + scrollProgress * Math.PI;
-      car.position.y = Math.sin(time * 0.3) * 0.015;
+      car.rotation.y = Math.sin(time * 0.5) * 0.2;
+      camera.position.x = 6 + Math.sin(time * 0.3) * 0.5;
     } else if (currentPage === 'colour') {
-      car.rotation.y = time * 0.15 + scrollProgress * Math.PI;
-      car.position.y = 0;
+      car.rotation.y = time * 0.2;
     } else if (currentPage === 'faq') {
-      car.rotation.y = time * 0.1;
-      car.position.y = 0;
+      car.rotation.y = time * 0.15;
     }
   }
 
-  // Camera — cinematic movement based on page + mouse
-  let targetCamX, targetCamY, targetCamZ;
-  
-  if (currentPage === 'repair') {
-    targetCamX = 4.5 + mouseX * 0.5;
-    targetCamY = 1.8 + mouseY * 0.3;
-    targetCamZ = 4.5;
-  } else {
-    targetCamX = 7 + mouseX * 0.8 + Math.sin(time * 0.15) * 0.3;
-    targetCamY = 2.5 + mouseY * 0.4 + Math.sin(time * 0.1) * 0.15;
-    targetCamZ = 7 + Math.cos(time * 0.1) * 0.3;
+  if (currentPage !== 'repair') {
+    camera.position.x = 6 + Math.sin(time * 0.2) * 0.3;
+    camera.position.y = 3 + Math.sin(time * 0.15) * 0.2;
   }
-
-  camera.position.x += (targetCamX - camera.position.x) * 0.04;
-  camera.position.y += (targetCamY - camera.position.y) * 0.04;
-  camera.position.z += (targetCamZ - camera.position.z) * 0.04;
 
   camera.lookAt(0, 0.5, 0);
-
-  // Animate particles
-  if (particles) {
-    const positions = particles.geometry.attributes.position.array;
-    for (let i = 0; i < positions.length; i += 3) {
-      positions[i + 1] += 0.003;
-      if (positions[i + 1] > 8) positions[i + 1] = 0;
-    }
-    particles.geometry.attributes.position.needsUpdate = true;
-    particles.rotation.y = time * 0.02;
-  }
 
   renderer.render(scene, camera);
 }
 
 // ============================================
-// ROUTING
+// Clean URL Routing (History API)
 // ============================================
+
+// Route to page ID map
 const routeToPage = {
   '/': 'home',
   '/car-painting-process/': 'process',
@@ -2342,6 +1856,7 @@ const routeToPage = {
   '/car-painting-faq': 'faq'
 };
 
+// Canonical routes (with trailing slash)
 const canonicalRoutes = {
   'home': '/',
   'process': '/car-painting-process/',
@@ -2378,7 +1893,6 @@ function navigateToPath(path, pushState = true) {
       if (activeLink) activeLink.classList.add('active');
 
       window.scrollTo(0, 0);
-      targetScrollProgress = 0;
       scrollProgress = 0;
 
       setTimeout(() => {
@@ -2387,22 +1901,24 @@ function navigateToPath(path, pushState = true) {
     }
 
     transition.classList.remove('active');
-  }, 600);
+  }, 400);
 }
 
-// Click handler for data-route links
+// Intercept clicks on elements with data-route attribute
 document.addEventListener('click', (e) => {
   const target = e.target.closest('[data-route]');
   if (target) {
     e.preventDefault();
     const path = target.getAttribute('data-route');
     navigateToPath(path, true);
+
+    // Close mobile menu if open
     document.getElementById('navLinks').classList.remove('open');
   }
 });
 
-// Browser back/forward
-window.addEventListener('popstate', () => {
+// Handle browser back/forward
+window.addEventListener('popstate', (e) => {
   const path = window.location.pathname;
   const pageId = getPageFromPath(path);
   const transition = document.getElementById('pageTransition');
@@ -2410,6 +1926,7 @@ window.addEventListener('popstate', () => {
 
   setTimeout(() => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
     const targetPage = document.getElementById(`page-${pageId}`);
     if (targetPage) {
       targetPage.classList.add('active');
@@ -2420,21 +1937,27 @@ window.addEventListener('popstate', () => {
       if (activeLink) activeLink.classList.add('active');
 
       window.scrollTo(0, 0);
-      targetScrollProgress = 0;
       scrollProgress = 0;
 
-      setTimeout(() => observeFadeElements(), 100);
+      setTimeout(() => {
+        observeFadeElements();
+      }, 100);
     }
+
     transition.classList.remove('active');
-  }, 600);
+  }, 400);
 });
 
 // FAQ toggle
 function toggleFaq(element) {
   const item = element.parentElement;
   const isOpen = item.classList.contains('open');
+
   item.parentElement.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
+
+  if (!isOpen) {
+    item.classList.add('open');
+  }
 }
 
 // Fade-in observer
@@ -2448,20 +1971,9 @@ function observeFadeElements() {
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-in, .process-step').forEach(el => {
-    el.classList.remove('visible');
     observer.observe(el);
   });
 }
-
-// Nav scroll effect
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('nav');
-  if (window.scrollY > 50) {
-    nav.classList.add('scrolled');
-  } else {
-    nav.classList.remove('scrolled');
-  }
-});
 
 // Mobile menu
 document.getElementById('menuBtn').addEventListener('click', () => {
@@ -2471,9 +1983,11 @@ document.getElementById('menuBtn').addEventListener('click', () => {
 // Initialize
 init();
 
+// Set initial route based on current URL path
 const initialPath = window.location.pathname;
 const initialPage = getPageFromPath(initialPath);
 
+// Set initial active page
 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 const initialTarget = document.getElementById(`page-${initialPage}`);
 if (initialTarget) {
@@ -2481,10 +1995,12 @@ if (initialTarget) {
   currentPage = initialPage;
 }
 
+// Set initial nav active state
 document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
 const initialActiveLink = document.querySelector(`.nav-links a[data-page="${initialPage}"]`);
 if (initialActiveLink) initialActiveLink.classList.add('active');
 
+// Replace state with canonical path
 const canonical = canonicalRoutes[initialPage] || '/';
 history.replaceState({ page: initialPage, path: canonical }, '', canonical);
 
