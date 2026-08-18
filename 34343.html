@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoCraft Painting — Professional Car Painting & Auto Body Services</title>
+<meta name="description" content="Professional automotive painting services including full body painting, panel painting, paint repair, and colour matching. Serving local vehicle owners with quality refinishing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface2: #1a1a1a;
+  --text: #f5f5f5;
+  --text-dim: #a0a0a0;
+  --text-muted: #666;
+  --accent: #c8a87c;
+  --accent-hover: #d4b88a;
+  --border: #222;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+#canvas-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+
+#canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 0 40px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: var(--text);
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--accent);
+}
+
+.nav-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Page containers */
+.page {
+  display: none;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.page.active { display: block; }
+
+/* Hero sections */
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 80px;
+  position: relative;
+}
+
+.hero-content {
+  max-width: 560px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.hero p {
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 480px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: var(--accent);
+  color: #0a0a0a;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.hero-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+/* Content sections */
+.content-section {
+  padding: 120px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 400;
+  margin-bottom: 24px;
+  line-height: 1.15;
+}
+
+.section-text {
+  font-size: 1rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  max-width: 640px;
+  margin-bottom: 48px;
+}
+
+/* Service grid */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.service-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 36px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.service-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: var(--surface2);
+}
+
+.service-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+
+.service-card p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.service-card .arrow {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+/* Process steps */
+.process-steps {
+  margin-top: 60px;
+}
+
+.process-step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 32px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.process-step.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.step-number {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.step-content h3 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.step-content p {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* FAQ */
+.faq-list {
+  margin-top: 48px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+}
+
+.faq-question {
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+
+.faq-question:hover { color: var(--accent); }
+
+.faq-question .icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+  color: var(--text-muted);
+}
+
+.faq-item.open .faq-question .icon { transform: rotate(45deg); }
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+  padding-top: 16px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  padding: 100px 80px 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover { color: var(--accent); }
+
+.breadcrumb span { margin: 0 8px; }
+
+/* Page header */
+.page-header {
+  padding: 40px 80px 80px;
+  max-width: 800px;
+}
+
+.page-header h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400;
+  margin-bottom: 20px;
+  line-height: 1.15;
+}
+
+.page-header p {
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* Two column layout */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* Color swatches */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.color-swatch {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.color-swatch:hover { transform: scale(1.05); }
+
+/* Footer */
+.footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 80px;
+  margin-top: 120px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+
+.footer-brand span { color: var(--accent); }
+
+.footer-desc {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+.footer h4 {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li { margin-bottom: 12px; }
+
+.footer-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--accent); }
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 60px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: scrollBounce 2s ease infinite;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+.scroll-indicator .line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--text-muted), transparent);
+}
+
+/* Info cards */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 32px;
+}
+
+.info-card .number {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.info-card h4 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.info-card p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* Highlight box */
+.highlight-box {
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  padding: 32px 40px;
+  margin: 40px 0;
+}
+
+.highlight-box p {
+  font-size: 1.05rem;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero { padding: 0 40px; }
+  .content-section { padding: 80px 40px; }
+  .page-header { padding: 40px 40px 60px; }
+  .breadcrumb { padding: 100px 40px 0; }
+  .footer { padding: 60px 40px; }
+  .two-col { grid-template-columns: 1fr; gap: 40px; }
+  .info-cards { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-menu-btn { display: block; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 72px; left: 0; right: 0;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero { padding: 0 20px; }
+  .content-section { padding: 60px 20px; }
+  .page-header { padding: 30px 20px 40px; }
+  .breadcrumb { padding: 90px 20px 0; }
+  .footer { padding: 40px 20px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+  .process-step { grid-template-columns: 1fr; gap: 12px; }
+  .service-grid { grid-template-columns: 1fr; }
+}
+
+/* Loading */
+.loader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: var(--bg);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  transition: opacity 0.6s ease;
+}
+
+.loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-text {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+.loader-bar {
+  width: 120px;
+  height: 1px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.loader-bar::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40%;
+  height: 100%;
+  background: var(--accent);
+  animation: loadBar 1.5s ease infinite;
+}
+
+@keyframes loadBar {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+
+/* Animations */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Internal link styling */
+.internal-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.internal-link:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* Page transition overlay */
+.page-transition {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: var(--bg);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.page-transition.active {
+  opacity: 1;
+  pointer-events: all;
+}
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-text">AUTOCRAFT</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- Page transition -->
+<div class="page-transition" id="pageTransition"></div>
+
+<!-- 3D Canvas -->
+<div id="canvas-container"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#/" class="nav-logo">Auto<span>Craft</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#/" data-page="home">Home</a></li>
+    <li><a href="#/car-painting-process/" data-page="process">Process</a></li>
+    <li><a href="#/full-car-painting/" data-page="full">Full Painting</a></li>
+    <li><a href="#/car-paint-repair/" data-page="repair">Paint Repair</a></li>
+    <li><a href="#/car-painting-colour-matching/" data-page="colour">Colour Matching</a></li>
+    <li><a href="#/car-painting-faq/" data-page="faq">FAQ</a></li>
+  </ul>
+  <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+</nav>
+
+<!-- Page 1: Home -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-label">Automotive Painting Services</div>
+      <h1>Precision paintwork for vehicles that matter</h1>
+      <p>From minor scratch repair to complete vehicle resprays, we deliver factory-quality finishes using professional-grade materials and proven techniques.</p>
+      <a href="#/car-painting-process/" class="hero-cta">Explore Our Process →</a>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-label fade-in">What We Do</div>
+    <h2 class="section-title fade-in">Automotive painting services built around quality</h2>
+    <p class="section-text fade-in">We operate a dedicated paint facility equipped for everything from single-panel touch-ups to full vehicle refinishing. Every job follows the same preparation standards, regardless of scope.</p>
+
+    <div class="service-grid">
+      <a href="#/car-painting-process/" class="service-card fade-in">
+        <h3>Car Painting</h3>
+        <p>Complete exterior refinishing using modern waterborne and solvent-based paint systems. Suitable for restoration, colour changes, and wear repair.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="#/full-car-painting/" class="service-card fade-in">
+        <h3>Full-Body Painting</h3>
+        <p>Comprehensive respray covering all exterior panels. Includes full strip-down, surface preparation, and multi-stage paint application.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="#/car-painting-process/" class="service-card fade-in">
+        <h3>Panel Painting</h3>
+        <p>Targeted repair and repainting of individual body panels. Colour-matched to your existing finish with seamless blending.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="#/car-paint-repair/" class="service-card fade-in">
+        <h3>Paint Repair</h3>
+        <p>Scratches, stone chips, and clear coat failure addressed with minimal intervention. Preserves surrounding factory finish where possible.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="#/car-painting-colour-matching/" class="service-card fade-in">
+        <h3>Colour Matching</h3>
+        <p>Spectrophotometer-assisted colour matching against manufacturer codes and physical samples. Tested under multiple light sources.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="#/car-painting-faq/" class="service-card fade-in">
+        <h3>Common Questions</h3>
+        <p>Answers about pricing, timelines, preparation requirements, and what to expect from a professional paint job.</p>
+        <span class="arrow">Read FAQ →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="content-section" style="background: var(--surface); max-width: 100%; padding: 120px 80px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div class="two-col">
+        <div>
+          <div class="section-label fade-in">Our Approach</div>
+          <h2 class="section-title fade-in">Preparation determines the finish</h2>
+          <p class="section-text fade-in" style="margin-bottom: 0;">The visible paint layer is only part of the work. Proper surface preparation, controlled environment conditions, and correct curing times are what separate a lasting finish from one that fails within months. We don't cut corners on any of these.</p>
+        </div>
+        <div>
+          <div class="info-cards" style="margin-top: 0;">
+            <div class="info-card fade-in">
+              <div class="number">15+</div>
+              <h4>Years Experience</h4>
+              <p>Working with passenger vehicles, light commercial, and classic cars.</p>
+            </div>
+            <div class="info-card fade-in">
+              <div class="number">3</div>
+              <h4>Paint Stages</h4>
+              <p>Primer, base coat, and clear coat applied in controlled conditions.</p>
+            </div>
+            <div class="info-card fade-in">
+              <div class="number">5yr</div>
+              <h4>Finish Warranty</h4>
+              <p>Against peeling, fading, and clear coat failure under normal use.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-label fade-in">Service Area</div>
+    <h2 class="section-title fade-in">Serving vehicle owners locally</h2>
+    <p class="section-text fade-in">Our workshop is located in the industrial district, convenient for drop-off and collection. We handle vehicles from all major manufacturers and work with insurance companies on approved repair claims. If you're unsure whether your vehicle needs a full respray or targeted repair, bring it in for an assessment — there's no charge for an initial inspection.</p>
+
+    <div class="faq-list">
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What types of vehicles do you work on?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">Passenger cars, SUVs, light commercial vehicles, and classic cars. We have experience with steel, aluminium, and composite body panels.</div>
+      </div>
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Do you work with insurance companies?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">Yes. We work with most major insurers on approved repair claims. We can also provide independent assessments if you're managing the repair privately.</div>
+      </div>
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How do I know if I need a full respray or a repair?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">It depends on the extent of damage, the condition of surrounding panels, and your end goal. We'll assess your vehicle and explain the options without pushing you toward the more expensive choice.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Page 2: Process -->
+<div class="page" id="page-process">
+  <div class="breadcrumb">
+    <a href="#/">Home</a> <span>/</span> Car Painting Process
+  </div>
+  <div class="page-header">
+    <div class="section-label">The Process</div>
+    <h1>How a professional car paint job is done</h1>
+    <p>Each stage builds on the one before it. Skipping or rushing any step shows up in the final finish — sometimes immediately, sometimes months later.</p>
+  </div>
+
+  <section class="content-section">
+    <div class="process-steps">
+      <div class="process-step fade-in">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3>Inspection</h3>
+          <p>The vehicle is assessed under bright workshop lighting. We document existing damage, note areas of rust or previous repair, and discuss your requirements. This determines the scope of work and helps us give you an accurate quote.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3>Surface Preparation</h3>
+          <p>All trim, handles, and removable components are taken off. The existing paint is assessed for adhesion. Areas that need repair are identified and marked. Good preparation is what makes the difference between a finish that lasts and one that doesn't.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3>Sanding</h3>
+          <p>The entire surface is sanded to create a uniform profile for the new paint to bond to. We use a combination of machine sanding for large areas and hand sanding for edges and contours. Dust extraction keeps the environment clean.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">04</div>
+        <div class="step-content">
+          <h3>Priming</h3>
+          <p>Epoxy or filler primer is applied to seal the surface and provide a stable base. Primer fills minor imperfections and ensures the colour coat adheres properly. It's sanded smooth once cured before the next stage.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">05</div>
+        <div class="step-content">
+          <h3>Colour Matching</h3>
+          <p>We identify your vehicle's paint code and mix the base coat to match. For older vehicles or colour changes, we use a spectrophotometer and test panels to get the match right before applying paint to your car.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">06</div>
+        <div class="step-content">
+          <h3>Painting</h3>
+          <p>The base coat is applied in a controlled paint booth with filtered air and consistent temperature. Multiple thin coats are built up to achieve full coverage and even colour. Flash-off times between coats are critical.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">07</div>
+        <div class="step-content">
+          <h3>Clear Coat</h3>
+          <p>A protective clear coat is applied over the colour. This provides UV protection, chemical resistance, and the depth of gloss you see on a finished vehicle. Two to three coats are typical, depending on the paint system.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">08</div>
+        <div class="step-content">
+          <h3>Polishing</h3>
+          <p>Once fully cured, the clear coat is wet-sanded and polished to remove any minor imperfections and bring up the final gloss level. This is where the finish goes from good to excellent.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">09</div>
+        <div class="step-content">
+          <h3>Final Inspection</h3>
+          <p>The vehicle is reassembled and inspected under multiple light sources. We check for colour consistency, surface quality, and proper fitment of all components before it's ready for collection.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div class="section-label fade-in">Common Questions</div>
+      <h2 class="section-title fade-in">About the painting process</h2>
+
+      <div class="faq-list">
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How long does car painting take?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">A full respray typically takes 5 to 10 working days, depending on the vehicle size, condition, and paint system. Single panel repairs can often be completed in 2 to 3 days. Curing time is a significant portion of this — rushing it compromises durability.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>What happens before painting?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">The vehicle is stripped of trim and components, sanded to bare metal or a stable existing finish, repaired where needed, primed, and sanded again. The paint booth is cleaned and the environment checked for temperature and humidity before any paint is applied.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How is the paint colour matched?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">We start with the manufacturer's paint code, which gives us the base formula. For accurate matching — especially on older vehicles where the original paint has faded — we use a spectrophotometer to read the actual colour and adjust the mix. Test panels are sprayed and compared under different lighting before we commit to the vehicle.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How many coats are applied?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Typically 2 to 3 coats of primer, 2 to 4 coats of base colour (depending on the colour and coverage needed), and 2 to 3 coats of clear coat. The exact number depends on the paint system, colour, and desired finish.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How long should new automotive paint last?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">A properly applied professional paint job should last 10 to 15 years before showing significant fading or wear, assuming normal use and basic maintenance like regular washing. Harsh climates, poor storage, and lack of care will reduce this.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Page 3: Full Car Painting -->
+<div class="page" id="page-full">
+  <div class="breadcrumb">
+    <a href="#/">Home</a> <span>/</span> <a href="#/car-painting-process/">Process</a> <span>/</span> Full Car Painting
+  </div>
+  <div class="page-header">
+    <div class="section-label">Full Respray</div>
+    <h1>Complete vehicle repainting</h1>
+    <p>A full respray is the most thorough option for restoring or changing a vehicle's exterior finish. It involves stripping, preparing, and repainting every exterior panel to a consistent standard.</p>
+  </div>
+
+  <section class="content-section">
+    <div class="two-col">
+      <div>
+        <h2 class="section-title fade-in" style="font-size: 1.6rem;">When a full repaint makes sense</h2>
+        <p class="section-text fade-in">Full resprays are appropriate when the existing finish has widespread failure — peeling clear coat, extensive fading across multiple panels, or heavy scratching. They're also the right choice for colour changes, restoration projects, or vehicles where panel-by-panel repair would leave visible inconsistencies.</p>
+        <p class="section-text fade-in">If damage is limited to one or two panels and the surrounding paint is in good condition, a targeted repair is usually more practical and cost-effective.</p>
+      </div>
+      <div>
+        <div class="highlight-box fade-in">
+          <p>"The quality of a full respray is determined in the preparation stage. The actual painting is the final step in a long process."</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-steps">
+      <div class="process-step fade-in">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3>Original Colour Assessment</h3>
+          <p>We document the current finish, note any areas of concern, and confirm whether you're keeping the original colour or changing it. This affects the preparation approach.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3>Body Preparation</h3>
+          <p>All exterior trim, lights, handles, and mouldings are removed. The vehicle is washed, decontaminated, and masked. Any dents or rust are repaired at this stage.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3>Primer Application</h3>
+          <p>The entire vehicle receives a uniform primer coat. This seals the surface, fills minor imperfections, and provides a consistent base for the colour coat.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">04</div>
+        <div class="step-content">
+          <h3>Base Coat</h3>
+          <p>The colour is applied in multiple thin coats until full, even coverage is achieved. Metallic and pearl colours require careful technique to avoid mottling.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">05</div>
+        <div class="step-content">
+          <h3>Clear Coat</h3>
+          <p>Multiple layers of clear coat are applied for protection and gloss. This is what you see and touch on the finished vehicle.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">06</div>
+        <div class="step-content">
+          <h3>Curing</h3>
+          <p>The paint is allowed to cure fully, either at ambient temperature or in a controlled bake cycle. This is not optional — insufficient curing leads to premature failure.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">07</div>
+        <div class="step-content">
+          <h3>Polishing</h3>
+          <p>The cured clear coat is cut and polished to achieve the final gloss level and remove any minor surface imperfections from the painting process.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">08</div>
+        <div class="step-content">
+          <h3>Reassembly & Final Check</h3>
+          <p>All components are refitted, gaps are checked, and the vehicle is inspected under multiple light sources before release.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div class="section-label fade-in">What Affects the Result</div>
+      <h2 class="section-title fade-in">Factors that influence finish quality</h2>
+      <p class="section-text fade-in">The final appearance of a full respray depends on several factors beyond the painter's skill. Understanding these helps set realistic expectations.</p>
+
+      <div class="faq-list">
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Does the original body condition matter?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Yes. Paint follows the surface beneath it. Dents, waves, and poor previous repairs will show through a new finish. Bodywork quality is as important as paint quality.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>What paint systems do you use?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">We use professional-grade waterborne and solvent-based systems from established manufacturers. The specific system depends on the job requirements, colour, and environmental regulations.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How do I care for a new paint job?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Avoid washing for the first 30 days. After that, use pH-neutral car shampoo, soft mitts, and dry with microfiber. Avoid automatic car washes with brushes. Regular waxing or ceramic coating will extend the life of the finish.</div>
+        </div>
+      </div>
+
+      <p class="section-text fade-in" style="margin-top: 48px;">For vehicle owners in the local area, we offer drop-off and collection from our workshop. If you'd like to discuss a full respray for your vehicle, <a href="#/car-painting-faq/" class="internal-link">see our FAQ</a> or get in touch for an assessment.</p>
+    </div>
+  </section>
+</div>
+
+<!-- Page 4: Paint Repair -->
+<div class="page" id="page-repair">
+  <div class="breadcrumb">
+    <a href="#/">Home</a> <span>/</span> Car Paint Repair
+  </div>
+  <div class="page-header">
+    <div class="section-label">Paint Repair</div>
+    <h1>Targeted repair for paint damage</h1>
+    <p>Not every paint issue requires a full respray. Scratches, stone chips, and localised clear coat failure can often be repaired while preserving the surrounding factory finish.</p>
+  </div>
+
+  <section class="content-section">
+    <div class="two-col">
+      <div>
+        <h2 class="section-title fade-in" style="font-size: 1.6rem;">Types of damage we repair</h2>
+        <p class="section-text fade-in">The most common paint issues we see are scratches from keys or shopping trolleys, stone chips on bonnets and bumpers, faded clear coat on horizontal surfaces, and peeling clear coat on older vehicles. Each requires a slightly different approach.</p>
+      </div>
+      <div>
+        <div class="info-cards" style="margin-top: 0;">
+          <div class="info-card fade-in">
+            <h4>Scratches</h4>
+            <p>From light surface marks to deeper scratches that reach the primer or metal.</p>
+          </div>
+          <div class="info-card fade-in">
+            <h4>Stone Chips</h4>
+            <p>Small impact damage, typically on leading edges and horizontal surfaces.</p>
+          </div>
+          <div class="info-card fade-in">
+            <h4>Clear Coat Failure</h4>
+            <p>Peeling or flaking of the protective clear layer, common on older vehicles.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-steps">
+      <div class="process-step fade-in">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3>Damage Inspection</h3>
+          <p>We assess the depth and extent of the damage to determine the repair approach. Surface scratches may only need polishing; deeper damage requires filling and repainting.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3>Cleaning</h3>
+          <p>The affected area is thoroughly cleaned and decontaminated. Any loose paint or rust is removed to create a stable surface for repair.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3>Sanding</h3>
+          <p>The damaged area and surrounding paint are sanded to create a smooth transition. The feathered edge ensures the repair blends seamlessly.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">04</div>
+        <div class="step-content">
+          <h3>Priming</h3>
+          <p>If bare metal is exposed, primer is applied to prevent corrosion and provide a base for the colour coat.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">05</div>
+        <div class="step-content">
+          <h3>Colour Matching</h3>
+          <p>The existing paint colour is identified and matched. Even small repairs need accurate colour matching to avoid visible differences.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">06</div>
+        <div class="step-content">
+          <h3>Spot Painting</h3>
+          <p>Colour is applied to the repaired area only. The spray pattern is controlled to keep overspray to a minimum.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">07</div>
+        <div class="step-content">
+          <h3>Blending</h3>
+          <p>The new paint is blended into the surrounding area to avoid a hard edge. This may involve spraying a light coat over adjacent panels.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">08</div>
+        <div class="step-content">
+          <h3>Clear Coat</h3>
+          <p>Clear coat is applied over the repair and blended into the surrounding finish for consistent gloss and protection.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">09</div>
+        <div class="step-content">
+          <h3>Polishing</h3>
+          <p>The repaired area is polished to match the gloss level of the surrounding paint. The goal is a repair that's invisible at normal viewing distance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div class="section-label fade-in">Customer Questions</div>
+      <h2 class="section-title fade-in">About paint repair</h2>
+
+      <div class="faq-list">
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Can all scratches be repaired without repainting the whole panel?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Most can. Light to moderate scratches that haven't reached bare metal can often be polished out or touched up. Deeper scratches may need localised repainting, but this is still less invasive than a full panel respray.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How long does a paint repair take?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Most repairs are completed within 1 to 3 days, depending on the extent of damage and curing time required. Same-day service is sometimes possible for very minor repairs.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Will the repair be visible?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">A well-executed repair should be very difficult to spot at normal viewing distance. Up close, a trained eye might find it, but that's true of most professional repairs. The goal is invisible at arm's length.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Is paint repair covered by insurance?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">It depends on the cause of damage and your policy. Accident-related damage is typically covered; wear and tear or environmental damage usually isn't. We can help assess whether a claim is worthwhile.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Page 5: Colour Matching -->
+<div class="page" id="page-colour">
+  <div class="breadcrumb">
+    <a href="#/">Home</a> <span>/</span> Colour Matching
+  </div>
+  <div class="page-header">
+    <div class="section-label">Colour Matching</div>
+    <h1>Accurate automotive colour matching</h1>
+    <p>Getting the colour right is one of the most technically demanding parts of automotive painting. Modern paint systems use complex formulations, and even small variations are visible to the eye.</p>
+  </div>
+
+  <section class="content-section">
+    <div class="two-col">
+      <div>
+        <h2 class="section-title fade-in" style="font-size: 1.6rem;">How colour matching works</h2>
+        <p class="section-text fade-in">Every vehicle has a paint code, usually found on a plate in the door jamb, under the bonnet, or in the boot. This code identifies the original colour formula. We use this as our starting point.</p>
+        <p class="section-text fade-in">For vehicles where the original paint has faded or been previously repaired, we use a spectrophotometer to read the actual colour and adjust the mix accordingly. Test panels are sprayed and compared under different lighting conditions before we apply paint to your vehicle.</p>
+      </div>
+      <div>
+        <div class="highlight-box fade-in">
+          <p>"Colour matching isn't just about the formula — it's about accounting for how the original paint has changed over time."</p>
+        </div>
+        <img src="https://image.qwenlm.ai/public_source/e70cad61-3039-4c1c-9f10-efd23f31b8f3/1e915c857-df1b-4520-bff7-672208ef859f.png" alt="Colour matching equipment and paint samples" style="width: 100%; border-radius: 8px; margin-top: 24px; border: 1px solid var(--border);">
+      </div>
+    </div>
+
+    <div class="process-steps">
+      <div class="process-step fade-in">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3>Paint Code Identification</h3>
+          <p>We locate your vehicle's paint code and look up the manufacturer's formula. This gives us the base composition for the colour.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3>Paint Sample Comparison</h3>
+          <p>We compare the formula against physical samples and your vehicle's actual colour. This reveals any variations due to age, fading, or previous repairs.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3>Colour Mixing</h3>
+          <p>The paint is mixed to the adjusted formula. Metallic and pearl colours require precise control of flake orientation and concentration.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">04</div>
+        <div class="step-content">
+          <h3>Test Panel</h3>
+          <p>A small test panel is sprayed with the mixed colour. This is compared against your vehicle under controlled lighting.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">05</div>
+        <div class="step-content">
+          <h3>Lighting Comparison</h3>
+          <p>The test panel is checked under daylight, fluorescent, and incandescent lighting. Colours can look different under each source, and we need a match that works in all conditions.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">06</div>
+        <div class="step-content">
+          <h3>Paint Application</h3>
+          <p>Once the colour is confirmed, it's applied to your vehicle using the same technique and conditions as the test panel.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in">
+        <div class="step-number">07</div>
+        <div class="step-content">
+          <h3>Final Blend</h3>
+          <p>The repaired area is blended into surrounding panels to ensure a seamless transition. This is especially important for metallic and pearl colours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div class="section-label fade-in">Why Blending Matters</div>
+      <h2 class="section-title fade-in">Understanding panel blending</h2>
+      <p class="section-text fade-in">When repairing a single panel, the new paint needs to blend into the adjacent panels. This is because even a perfect colour match can look different if the application technique or clear coat thickness varies. Blending involves spraying a light coat of colour over the neighbouring panels to create a smooth transition.</p>
+      <p class="section-text fade-in">This is standard practice in professional auto body work and is necessary for an invisible repair. It doesn't mean we're repainting entire panels — just feathering the colour at the edges.</p>
+
+      <div class="faq-list">
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Why can't you just match the colour exactly?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">You can match the colour very closely, but the way paint looks also depends on application technique, clear coat thickness, and how the metallic flakes orient themselves. Blending accounts for these variables.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Does blending mean repainting other panels?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Not fully. Blending involves spraying a light coat over adjacent panels at the edges only. The majority of those panels retain their original finish. It's a targeted technique, not a full respray.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How accurate is spectrophotometer matching?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Very accurate for the sample being read. The challenge is that vehicle paint isn't uniform — different panels may have faded differently, and previous repairs may have used slightly different colours. The spectrophotometer gives us a precise reading; experience tells us how to apply it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Page 6: FAQ -->
+<div class="page" id="page-faq">
+  <div class="breadcrumb">
+    <a href="#/">Home</a> <span>/</span> FAQ
+  </div>
+  <div class="page-header">
+    <div class="section-label">FAQ</div>
+    <h1>Questions about car painting</h1>
+    <p>Straightforward answers to the questions we hear most often. If yours isn't here, get in touch and we'll help.</p>
+  </div>
+
+  <section class="content-section">
+    <div class="section-label fade-in">Cost & Pricing</div>
+    <h2 class="section-title fade-in">Car painting cost factors</h2>
+    <p class="section-text fade-in">Pricing depends on the scope of work, vehicle size, paint system, and body condition. Here are the main factors that affect cost.</p>
+
+    <div class="faq-list">
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What determines the cost of a paint job?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">Vehicle size, extent of damage, paint type (solid, metallic, pearl), body preparation required, and whether it's a full respray or localised repair. Colour changes cost more than matching the original.</div>
+      </div>
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How much does a full respray cost?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">Full resprays typically range from £2,000 to £6,000+ depending on the factors above. We provide detailed quotes after inspection so there are no surprises.</div>
+      </div>
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Is a cheaper paint job worth it?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">It depends on your priorities. Budget paint jobs often cut corners on preparation or use lower-grade materials. The finish may look acceptable initially but fail prematurely. For a vehicle you plan to keep, investing in quality preparation pays off.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div class="section-label fade-in">Timing</div>
+      <h2 class="section-title fade-in">Painting time & scheduling</h2>
+
+      <div class="faq-list">
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How long will my vehicle be in the workshop?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Full resprays: 5–10 working days. Panel repairs: 2–3 days. Minor scratch repairs: sometimes same-day. These are working days — actual calendar time may be longer depending on scheduling.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Can I use my vehicle while it's being painted?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">No. The vehicle needs to remain in the workshop for the duration of the work. We'll agree on a collection date when the job is confirmed.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-label fade-in">Preparation & Aftercare</div>
+    <h2 class="section-title fade-in">Before and after painting</h2>
+
+    <div class="faq-list">
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What should I do before bringing my vehicle in?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">Remove personal belongings from the vehicle. We'll strip exterior trim as part of the process, but interior items should be taken out. If the vehicle is particularly dirty, a basic wash helps with the initial assessment.</div>
+      </div>
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What should I check when collecting my vehicle?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">Inspect the finish under different lighting conditions. Check that all trim and components are properly refitted. Look for consistent colour across panels and a uniform gloss level. Any concerns should be raised before you leave.</div>
+      </div>
+      <div class="faq-item fade-in">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How do I maintain a new paint job?</span>
+          <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">Don't wash for 30 days. After that, use pH-neutral shampoo, soft mitts, and dry with microfiber. Avoid brush car washes. Apply wax or ceramic coating every 6–12 months. Park in shade or a garage when possible.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" style="background: var(--surface); max-width: 100%;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div class="section-label fade-in">Insurance & Claims</div>
+      <h2 class="section-title fade-in">Insurance-related repairs</h2>
+
+      <div class="faq-list">
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Do you work with insurance companies?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Yes. We work with most major insurers on approved repair claims. We can also provide independent assessments and quotes if you're managing the repair privately or through a third party.</div>
+        </div>
+        <div class="faq-item fade-in">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Will insurance cover a full respray?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="faq-answer">Insurance typically covers damage from specific incidents (accidents, vandalism, weather events). It doesn't cover wear and tear, fading, or pre-existing damage. We'll advise on what's likely to be covered after assessment.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-label fade-in">Still Have Questions?</div>
+    <h2 class="section-title fade-in">Get in touch</h2>
+    <p class="section-text fade-in">If your question isn't answered here, we're happy to help. Bring your vehicle in for a free assessment, or contact us to discuss your requirements.</p>
+    <a href="#/" class="hero-cta">Back to Home →</a>
+  </section>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Auto<span>Craft</span></div>
+      <p class="footer-desc">Professional automotive painting and auto body services. Quality finishes built on thorough preparation and proven technique.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul class="footer-links">
+        <li><a href="#/car-painting-process/">Car Painting</a></li>
+        <li><a href="#/full-car-painting/">Full-Body Painting</a></li>
+        <li><a href="#/car-paint-repair/">Paint Repair</a></li>
+        <li><a href="#/car-painting-colour-matching/">Colour Matching</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Information</h4>
+      <ul class="footer-links">
+        <li><a href="#/car-painting-process/">Our Process</a></li>
+        <li><a href="#/car-painting-faq/">FAQ</a></li>
+        <li><a href="#/">Service Area</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul class="footer-links">
+        <li>Workshop address</li>
+        <li>Industrial district</li>
+        <li>Mon–Fri: 8am–5pm</li>
+        <li>Sat: 9am–1pm</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AutoCraft Painting. All rights reserved.</span>
+    <span>Professional automotive refinishing services</span>
+  </div>
+</footer>
+
+<script>
+// Three.js Scene Setup
+let scene, camera, renderer, car, workshop;
+let scrollProgress = 0;
+let currentPage = 'home';
+let animationFrame;
+let clock;
+
+const container = document.getElementById('canvas-container');
+
+function init() {
+  clock = new THREE.Clock();
+  scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0a0a0a, 0.035);
+
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(6, 3, 8);
+  camera.lookAt(0, 0.5, 0);
+
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  container.appendChild(renderer.domElement);
+
+  // Lighting
+  const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+  scene.add(ambientLight);
+
+  // Main overhead light
+  const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  mainLight.position.set(5, 10, 5);
+  mainLight.castShadow = true;
+  mainLight.shadow.mapSize.width = 2048;
+  mainLight.shadow.mapSize.height = 2048;
+  mainLight.shadow.camera.near = 0.5;
+  mainLight.shadow.camera.far = 50;
+  mainLight.shadow.camera.left = -10;
+  mainLight.shadow.camera.right = 10;
+  mainLight.shadow.camera.top = 10;
+  mainLight.shadow.camera.bottom = -10;
+  scene.add(mainLight);
+
+  // Fill lights
+  const fillLight1 = new THREE.DirectionalLight(0xc8d8e8, 0.4);
+  fillLight1.position.set(-5, 5, -5);
+  scene.add(fillLight1);
+
+  const fillLight2 = new THREE.DirectionalLight(0xffe8d0, 0.3);
+  fillLight2.position.set(0, 3, -8);
+  scene.add(fillLight2);
+
+  // Workshop environment
+  createWorkshop();
+
+  // Car
+  createCar();
+
+  // Environment map for reflections
+  createEnvironmentMap();
+
+  window.addEventListener('resize', onResize);
+  window.addEventListener('scroll', onScroll);
+
+  animate();
+
+  // Hide loader
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1500);
+}
+
+function createEnvironmentMap() {
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
+
+  // Create a simple environment scene
+  const envScene = new THREE.Scene();
+  envScene.background = new THREE.Color(0x1a1a1a);
+
+  // Add some lights to the environment
+  const envLight1 = new THREE.PointLight(0xffffff, 2, 20);
+  envLight1.position.set(5, 5, 5);
+  envScene.add(envLight1);
+
+  const envLight2 = new THREE.PointLight(0xc8d8e8, 1.5, 20);
+  envLight2.position.set(-5, 5, -5);
+  envScene.add(envLight2);
+
+  const envLight3 = new THREE.PointLight(0xffe8d0, 1, 20);
+  envLight3.position.set(0, 8, 0);
+  envScene.add(envLight3);
+
+  // Add some geometry for reflections
+  const envBox = new THREE.Mesh(
+    new THREE.BoxGeometry(20, 10, 20),
+    new THREE.MeshBasicMaterial({ color: 0x222222, side: THREE.BackSide })
+  );
+  envScene.add(envBox);
+
+  const envMap = pmremGenerator.fromScene(envScene, 0.04).texture;
+  scene.environment = envMap;
+
+  pmremGenerator.dispose();
+  envScene.traverse((child) => {
+    if (child.geometry) child.geometry.dispose();
+    if (child.material) child.material.dispose();
+  });
+}
+
+function createWorkshop() {
+  workshop = new THREE.Group();
+
+  // Floor
+  const floorGeometry = new THREE.PlaneGeometry(30, 30);
+  const floorMaterial = new THREE.MeshStandardMaterial({
+    color: 0x2a2a2a,
+    roughness: 0.7,
+    metalness: 0.1
+  });
+  const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -0.01;
+  floor.receiveShadow = true;
+  workshop.add(floor);
+
+  // Floor grid lines
+  const gridHelper = new THREE.GridHelper(30, 30, 0x333333, 0x222222);
+  gridHelper.position.y = 0.01;
+  workshop.add(gridHelper);
+
+  // Back wall
+  const wallGeometry = new THREE.PlaneGeometry(30, 10);
+  const wallMaterial = new THREE.MeshStandardMaterial({
+    color: 0x1a1a1a,
+    roughness: 0.9,
+    metalness: 0.0
+  });
+  const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  backWall.position.set(0, 5, -10);
+  workshop.add(backWall);
+
+  // Side walls
+  const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  leftWall.position.set(-10, 5, 0);
+  leftWall.rotation.y = Math.PI / 2;
+  workshop.add(leftWall);
+
+  const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  rightWall.position.set(10, 5, 0);
+  rightWall.rotation.y = -Math.PI / 2;
+  workshop.add(rightWall);
+
+  // Ceiling lights (visual only)
+  for (let i = -2; i <= 2; i++) {
+    const lightFixture = new THREE.Mesh(
+      new THREE.BoxGeometry(0.3, 0.1, 4),
+      new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    lightFixture.position.set(i * 3, 8, -2);
+    workshop.add(lightFixture);
+
+    const lightGlow = new THREE.PointLight(0xffffff, 0.5, 10);
+    lightGlow.position.set(i * 3, 7.5, -2);
+    workshop.add(lightGlow);
+  }
+
+  // Tool cabinet (simple box)
+  const cabinetGeometry = new THREE.BoxGeometry(2, 1.5, 0.8);
+  const cabinetMaterial = new THREE.MeshStandardMaterial({
+    color: 0x3a3a3a,
+    roughness: 0.5,
+    metalness: 0.3
+  });
+  const cabinet = new THREE.Mesh(cabinetGeometry, cabinetMaterial);
+  cabinet.position.set(-6, 0.75, -6);
+  cabinet.castShadow = true;
+  workshop.add(cabinet);
+
+  // Another cabinet
+  const cabinet2 = cabinet.clone();
+  cabinet2.position.set(6, 0.75, -6);
+  workshop.add(cabinet2);
+
+  scene.add(workshop);
+}
+
+function createCar() {
+  car = new THREE.Group();
+
+  // Car body - main shape
+  const bodyShape = new THREE.Shape();
+  bodyShape.moveTo(-2.2, 0.3);
+  bodyShape.lineTo(-2.0, 0.3);
+  bodyShape.lineTo(-1.8, 0.5);
+  bodyShape.lineTo(-1.5, 0.6);
+  bodyShape.lineTo(-1.0, 0.6);
+  bodyShape.lineTo(-0.8, 0.9);
+  bodyShape.lineTo(-0.5, 1.1);
+  bodyShape.lineTo(0.5, 1.1);
+  bodyShape.lineTo(0.8, 0.9);
+  bodyShape.lineTo(1.0, 0.6);
+  bodyShape.lineTo(1.5, 0.6);
+  bodyShape.lineTo(1.8, 0.5);
+  bodyShape.lineTo(2.0, 0.3);
+  bodyShape.lineTo(2.2, 0.3);
+  bodyShape.lineTo(2.2, 0.0);
+  bodyShape.lineTo(-2.2, 0.0);
+  bodyShape.lineTo(-2.2, 0.3);
+
+  const extrudeSettings = {
+    depth: 1.6,
+    bevelEnabled: true,
+    bevelThickness: 0.05,
+    bevelSize: 0.05,
+    bevelSegments: 3
+  };
+
+  const bodyGeometry = new THREE.ExtrudeGeometry(bodyShape, extrudeSettings);
+  bodyGeometry.center();
+
+  // Metallic paint material
+  const paintMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x1a3a5c,
+    metalness: 0.7,
+    roughness: 0.2,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.1,
+    reflectivity: 1.0
+  });
+
+  const body = new THREE.Mesh(bodyGeometry, paintMaterial);
+  body.position.y = 0.5;
+  body.castShadow = true;
+  body.receiveShadow = true;
+  car.add(body);
+
+  // Windows
+  const windowMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x111111,
+    metalness: 0.9,
+    roughness: 0.1,
+    transparent: true,
+    opacity: 0.7
+  });
+
+  const windshieldGeometry = new THREE.PlaneGeometry(1.2, 0.5);
+  const windshield = new THREE.Mesh(windshieldGeometry, windowMaterial);
+  windshield.position.set(-0.3, 1.3, 0);
+  windshield.rotation.y = Math.PI / 2;
+  windshield.rotation.z = 0.3;
+  car.add(windshield);
+
+  // Wheels
+  const wheelGeometry = new THREE.CylinderGeometry(0.35, 0.35, 0.25, 16);
+  const wheelMaterial = new THREE.MeshStandardMaterial({
+    color: 0x111111,
+    roughness: 0.8,
+    metalness: 0.2
+  });
+
+  const wheelPositions = [
+    [-1.4, 0.35, 0.9],
+    [-1.4, 0.35, -0.9],
+    [1.4, 0.35, 0.9],
+    [1.4, 0.35, -0.9]
+  ];
+
+  wheelPositions.forEach(pos => {
+    const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+    wheel.position.set(...pos);
+    wheel.rotation.x = Math.PI / 2;
+    wheel.castShadow = true;
+    car.add(wheel);
+
+    // Rim
+    const rimGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.26, 8);
+    const rimMaterial = new THREE.MeshStandardMaterial({
+      color: 0x888888,
+      roughness: 0.3,
+      metalness: 0.8
+    });
+    const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+    rim.position.set(...pos);
+    rim.rotation.x = Math.PI / 2;
+    car.add(rim);
+  });
+
+  // Headlights
+  const headlightGeometry = new THREE.SphereGeometry(0.15, 8, 8);
+  const headlightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffee });
+
+  const headlight1 = new THREE.Mesh(headlightGeometry, headlightMaterial);
+  headlight1.position.set(-2.1, 0.5, 0.5);
+  car.add(headlight1);
+
+  const headlight2 = headlight1.clone();
+  headlight2.position.set(-2.1, 0.5, -0.5);
+  car.add(headlight2);
+
+  // Taillights
+  const taillightMaterial = new THREE.MeshBasicMaterial({ color: 0xff2222 });
+
+  const taillight1 = new THREE.Mesh(headlightGeometry, taillightMaterial);
+  taillight1.position.set(2.1, 0.5, 0.5);
+  car.add(taillight1);
+
+  const taillight2 = taillight1.clone();
+  taillight2.position.set(2.1, 0.5, -0.5);
+  car.add(taillight2);
+
+  car.position.y = 0;
+  scene.add(car);
+}
+
+function onResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onScroll() {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  scrollProgress = scrollTop / docHeight;
+}
+
+function animate() {
+  animationFrame = requestAnimationFrame(animate);
+
+  const time = clock.getElapsedTime();
+  const delta = clock.getDelta();
+
+  if (car) {
+    // Subtle idle animation
+    car.rotation.y = Math.sin(time * 0.3) * 0.1;
+
+    // Scroll-based rotation
+    if (currentPage === 'home') {
+      car.rotation.y = scrollProgress * Math.PI * 2;
+      car.position.y = Math.sin(scrollProgress * Math.PI) * 0.2;
+    } else if (currentPage === 'process') {
+      car.rotation.y = scrollProgress * Math.PI * 1.5;
+    } else if (currentPage === 'full') {
+      car.rotation.y = scrollProgress * Math.PI;
+    } else if (currentPage === 'repair') {
+      car.rotation.y = Math.sin(time * 0.5) * 0.2;
+      camera.position.x = 6 + Math.sin(time * 0.3) * 0.5;
+    } else if (currentPage === 'colour') {
+      car.rotation.y = time * 0.2;
+    } else if (currentPage === 'faq') {
+      car.rotation.y = time * 0.15;
+    }
+  }
+
+  // Camera subtle movement
+  if (currentPage !== 'repair') {
+    camera.position.x = 6 + Math.sin(time * 0.2) * 0.3;
+    camera.position.y = 3 + Math.sin(time * 0.15) * 0.2;
+  }
+
+  camera.lookAt(0, 0.5, 0);
+
+  renderer.render(scene, camera);
+}
+
+// Page routing
+function navigateToPage(pageId) {
+  const transition = document.getElementById('pageTransition');
+  transition.classList.add('active');
+
+  setTimeout(() => {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+    // Show target page
+    const targetPage = document.getElementById(`page-${pageId}`);
+    if (targetPage) {
+      targetPage.classList.add('active');
+      currentPage = pageId;
+
+      // Update nav active state
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const activeLink = document.querySelector(`.nav-links a[data-page="${pageId}"]`);
+      if (activeLink) activeLink.classList.add('active');
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+
+      // Reset scroll progress
+      scrollProgress = 0;
+
+      // Trigger fade-in animations
+      setTimeout(() => {
+        observeFadeElements();
+      }, 100);
+    }
+
+    transition.classList.remove('active');
+  }, 400);
+}
+
+// Hash routing
+function handleRoute() {
+  const hash = window.location.hash || '#/';
+  let pageId = 'home';
+
+  if (hash === '#/car-painting-process/') pageId = 'process';
+  else if (hash === '#/full-car-painting/') pageId = 'full';
+  else if (hash === '#/car-paint-repair/') pageId = 'repair';
+  else if (hash === '#/car-painting-colour-matching/') pageId = 'colour';
+  else if (hash === '#/car-painting-faq/') pageId = 'faq';
+
+  navigateToPage(pageId);
+}
+
+window.addEventListener('hashchange', handleRoute);
+
+// FAQ toggle
+function toggleFaq(element) {
+  const item = element.parentElement;
+  const isOpen = item.classList.contains('open');
+
+  // Close all in same list
+  item.parentElement.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+
+  if (!isOpen) {
+    item.classList.add('open');
+  }
+}
+
+// Fade-in observer
+function observeFadeElements() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in, .process-step').forEach(el => {
+    observer.observe(el);
+  });
+}
+
+// Mobile menu
+document.getElementById('menuBtn').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Initialize
+init();
+handleRoute();
+observeFadeElements();
+</script>
+
+</body>
+</html>
